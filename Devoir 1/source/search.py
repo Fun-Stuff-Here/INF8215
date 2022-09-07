@@ -64,7 +64,7 @@ class SearchProblem:
         util.raiseNotDefined()
 
 
-def tinyMazeSearch(problem):
+def tinyMazeSearch(problem: SearchProblem):
     """
     Returns a sequence of moves that solves tinyMaze.  For any other maze, the
     sequence of moves will be incorrect, so only use this for tinyMaze.
@@ -72,9 +72,9 @@ def tinyMazeSearch(problem):
     from game import Directions
     s = Directions.SOUTH
     w = Directions.WEST
-    return  [s, s, w, s, w, w, s, w]
+    return [s, s, w, s, w, w, s, w]
 
-def depthFirstSearch(problem):
+def depthFirstSearch(problem: SearchProblem):
     """
     Search the deepest nodes in the search tree first.
 
@@ -92,11 +92,35 @@ def depthFirstSearch(problem):
     '''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 1 ICI
     '''
+    POSITION_INDEX = 0
+    DIRECTION_INDEX = 1
+    COST_INDEX = 2
 
-    util.raiseNotDefined()
+    visitedPositions = dict()
+    stack = util.Stack()
+    start = (problem.getStartState(), None, 0) #Node format ( (x,y), Direction, cost)
+    stack.push(start)
 
+    while not stack.isEmpty():
+        currentState = stack.pop()
+        for successor in problem.getSuccessors(currentState[POSITION_INDEX]):
+            if not successor[POSITION_INDEX] in visitedPositions:
+                visitedPositions[successor[POSITION_INDEX]] = (currentState[POSITION_INDEX], successor[DIRECTION_INDEX])
+                stack.push(successor)
 
-def breadthFirstSearch(problem):
+        if problem.isGoalState(currentState[POSITION_INDEX]):
+            solution = []
+
+            while currentState[POSITION_INDEX] is not start[POSITION_INDEX]:
+                currentState = visitedPositions[currentState[POSITION_INDEX]]
+                solution = [*solution, currentState[DIRECTION_INDEX]]
+
+            solution.reverse()
+            return solution
+
+    return None
+
+def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
 
 
@@ -106,7 +130,7 @@ def breadthFirstSearch(problem):
 
     util.raiseNotDefined()
 
-def uniformCostSearch(problem):
+def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
 
 
@@ -116,14 +140,14 @@ def uniformCostSearch(problem):
 
     util.raiseNotDefined()
 
-def nullHeuristic(state, problem=None):
+def nullHeuristic(state, problem: SearchProblem = None):
     """
     A heuristic function estimates the cost from the current state to the nearest
     goal in the provided SearchProblem.  This heuristic is trivial.
     """
     return 0
 
-def aStarSearch(problem, heuristic=nullHeuristic):
+def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     '''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 4 ICI

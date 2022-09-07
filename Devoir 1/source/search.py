@@ -165,8 +165,35 @@ def uniformCostSearch(problem: SearchProblem):
     '''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 3 ICI
     '''
+    POSITION_INDEX = 0
+    DIRECTION_INDEX = 1
+    COST_INDEX = 2
 
-    util.raiseNotDefined()
+    visitedPositions = dict()
+    queue = util.PriorityQueue()
+    start = (problem.getStartState(), None, 0) #Node format ( (x,y), Direction, cost)
+    queue.push(start, 0)
+    visitedPositions[start[POSITION_INDEX]] = (start[POSITION_INDEX], start[DIRECTION_INDEX]) # avoid enqueue of start
+
+    while not queue.isEmpty():
+        currentState = queue.pop()
+
+        if problem.isGoalState(currentState[POSITION_INDEX]):
+            solution = []
+
+            while currentState[POSITION_INDEX] is not start[POSITION_INDEX]:
+                currentState = visitedPositions[currentState[POSITION_INDEX]]
+                solution = [*solution, currentState[DIRECTION_INDEX]]
+
+            solution.reverse()
+            return solution
+
+        for successor in problem.getSuccessors(currentState[POSITION_INDEX]):
+            if not successor[POSITION_INDEX] in visitedPositions:
+                visitedPositions[successor[POSITION_INDEX]] = (currentState[POSITION_INDEX], successor[DIRECTION_INDEX])
+                queue.push(successor, successor[COST_INDEX])
+
+    return None
 
 def nullHeuristic(state, problem: SearchProblem = None):
     """

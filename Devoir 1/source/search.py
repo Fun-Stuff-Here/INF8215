@@ -21,30 +21,31 @@ Pacman agents (in searchAgents.py).
 
 import util
 
+
 class SearchProblem:
-    """
+	"""
     This class outlines the structure of a search problem, but doesn't implement
     any of the methods (in object-oriented terminology: an abstract class).
 
     You do not need to change anything in this class, ever.
     """
 
-    def getStartState(self):
-        """
+	def getStartState(self):
+		"""
         Returns the start state for the search problem.
         """
-        util.raiseNotDefined()
+		util.raiseNotDefined()
 
-    def isGoalState(self, state):
-        """
+	def isGoalState(self, state):
+		"""
           state: Search state
 
         Returns True if and only if the state is a valid goal state.
         """
-        util.raiseNotDefined()
+		util.raiseNotDefined()
 
-    def getSuccessors(self, state):
-        """
+	def getSuccessors(self, state):
+		"""
           state: Search state
 
         For a given state, this should return a list of triples, (successor,
@@ -52,30 +53,31 @@ class SearchProblem:
         state, 'action' is the action required to get there, and 'stepCost' is
         the incremental cost of expanding to that successor.
         """
-        util.raiseNotDefined()
+		util.raiseNotDefined()
 
-    def getCostOfActions(self, actions):
-        """
+	def getCostOfActions(self, actions):
+		"""
          actions: A list of actions to take
 
         This method returns the total cost of a particular sequence of actions.
         The sequence must be composed of legal moves.
         """
-        util.raiseNotDefined()
+		util.raiseNotDefined()
 
 
 def tinyMazeSearch(problem: SearchProblem):
-    """
+	"""
     Returns a sequence of moves that solves tinyMaze.  For any other maze, the
     sequence of moves will be incorrect, so only use this for tinyMaze.
     """
-    from game import Directions
-    s = Directions.SOUTH
-    w = Directions.WEST
-    return [s, s, w, s, w, w, s, w]
+	from game import Directions
+	s = Directions.SOUTH
+	w = Directions.WEST
+	return [s, s, w, s, w, w, s, w]
+
 
 def depthFirstSearch(problem: SearchProblem):
-    """
+	"""
     Search the deepest nodes in the search tree first.
 
     Your search algorithm needs to return a list of actions that reaches the
@@ -89,126 +91,124 @@ def depthFirstSearch(problem: SearchProblem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
 
-    '''
+	'''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 1 ICI
     '''
-    POSITION_INDEX = 0
-    DIRECTION_INDEX = 1
-    COST_INDEX = 2
 
-    visitedPositions = dict()
-    stack = util.Stack()
-    start = (problem.getStartState(), None, 0) #Node format ( (x,y), Direction, cost)
-    stack.push(start)
+	POSITION_INDEX = 0
+	DIRECTION_INDEX = 1
 
-    while not stack.isEmpty():
-        currentState = stack.pop()
+	def depthFirstSearchRecursive(searchProblem: SearchProblem, currentState, visitedPositions: set):
+		if searchProblem.isGoalState(currentState[POSITION_INDEX]):
+			return [currentState[DIRECTION_INDEX]]
 
-        if problem.isGoalState(currentState[POSITION_INDEX]):
-            solution = []
+		for successor in searchProblem.getSuccessors(currentState[POSITION_INDEX]):
+			if not successor[POSITION_INDEX] in visitedPositions:
+				visitedPositions.add(successor[POSITION_INDEX])
+				childStateSolution = depthFirstSearchRecursive(searchProblem=searchProblem, currentState=successor,
+															   visitedPositions=visitedPositions)
+				if childStateSolution is not None:
+					return [currentState[DIRECTION_INDEX], *childStateSolution]
 
-            while currentState[POSITION_INDEX] is not start[POSITION_INDEX]:
-                currentState = visitedPositions[currentState[POSITION_INDEX]]
-                solution = [*solution, currentState[DIRECTION_INDEX]]
+		return None
 
-            solution.reverse()
-            return solution
+	start = (problem.getStartState(), None, 0)
+	visitedPositions = set()
+	visitedPositions.add(start[POSITION_INDEX])
 
-        for successor in problem.getSuccessors(currentState[POSITION_INDEX]):
-            if not successor[POSITION_INDEX] in visitedPositions:
-                visitedPositions[successor[POSITION_INDEX]] = (currentState[POSITION_INDEX], successor[DIRECTION_INDEX])
-                stack.push(successor)
+	solution = depthFirstSearchRecursive(searchProblem=problem, currentState=start, visitedPositions=visitedPositions)
+	return solution[1:] if solution is not None else []
 
-    return None
 
 def breadthFirstSearch(problem: SearchProblem):
-    """Search the shallowest nodes in the search tree first."""
+	"""Search the shallowest nodes in the search tree first."""
 
-
-    '''
+	'''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 2 ICI
     '''
-    POSITION_INDEX = 0
-    DIRECTION_INDEX = 1
-    COST_INDEX = 2
+	POSITION_INDEX = 0
+	DIRECTION_INDEX = 1
+	COST_INDEX = 2
 
-    visitedPositions = dict()
-    queue = util.Queue()
-    start = (problem.getStartState(), None, 0) #Node format ( (x,y), Direction, cost)
-    queue.push(start)
-    visitedPositions[start[POSITION_INDEX]] = (start[POSITION_INDEX], start[DIRECTION_INDEX]) # avoid enqueue of start
+	visitedPositions = dict()
+	queue = util.Queue()
+	start = (problem.getStartState(), None, 0)  # Node format ( (x,y), Direction, cost)
+	queue.push(start)
+	visitedPositions[start[POSITION_INDEX]] = (start[POSITION_INDEX], start[DIRECTION_INDEX])  # avoid enqueue of start
 
-    while not queue.isEmpty():
-        currentState = queue.pop()
+	while not queue.isEmpty():
+		currentState = queue.pop()
 
-        if problem.isGoalState(currentState[POSITION_INDEX]):
-            solution = []
+		if problem.isGoalState(currentState[POSITION_INDEX]):
+			solution = []
 
-            while currentState[POSITION_INDEX] is not start[POSITION_INDEX]:
-                currentState = visitedPositions[currentState[POSITION_INDEX]]
-                solution = [*solution, currentState[DIRECTION_INDEX]]
+			while currentState[POSITION_INDEX] is not start[POSITION_INDEX]:
+				currentState = visitedPositions[currentState[POSITION_INDEX]]
+				solution = [*solution, currentState[DIRECTION_INDEX]]
 
-            solution.reverse()
-            return solution
+			solution.reverse()
+			return solution
 
-        for successor in problem.getSuccessors(currentState[POSITION_INDEX]):
-            if not successor[POSITION_INDEX] in visitedPositions:
-                visitedPositions[successor[POSITION_INDEX]] = (currentState[POSITION_INDEX], successor[DIRECTION_INDEX])
-                queue.push(successor)
+		for successor in problem.getSuccessors(currentState[POSITION_INDEX]):
+			if not successor[POSITION_INDEX] in visitedPositions:
+				visitedPositions[successor[POSITION_INDEX]] = (currentState[POSITION_INDEX], successor[DIRECTION_INDEX])
+				queue.push(successor)
 
-    return None
+	return None
+
 
 def uniformCostSearch(problem: SearchProblem):
-    """Search the node of least total cost first."""
+	"""Search the node of least total cost first."""
 
-
-    '''
+	'''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 3 ICI
     '''
-    POSITION_INDEX = 0
-    DIRECTION_INDEX = 1
-    COST_INDEX = 2
+	POSITION_INDEX = 0
+	DIRECTION_INDEX = 1
+	COST_INDEX = 2
 
-    visitedPositions = dict()
-    queue = util.PriorityQueue()
-    start = (problem.getStartState(), None, 0) #Node format ( (x,y), Direction, cost)
-    queue.push(start, 0)
-    visitedPositions[start[POSITION_INDEX]] = (start[POSITION_INDEX], start[DIRECTION_INDEX]) # avoid enqueue of start
+	visitedPositions = dict()
+	queue = util.PriorityQueue()
+	start = (problem.getStartState(), None, 0)  # Node format ( (x,y), Direction, cost)
+	queue.push(start, 0)
+	visitedPositions[start[POSITION_INDEX]] = (start[POSITION_INDEX], start[DIRECTION_INDEX])  # avoid enqueue of start
 
-    while not queue.isEmpty():
-        currentState = queue.pop()
+	while not queue.isEmpty():
+		currentState = queue.pop()
 
-        if problem.isGoalState(currentState[POSITION_INDEX]):
-            solution = []
+		if problem.isGoalState(currentState[POSITION_INDEX]):
+			solution = []
 
-            while currentState[POSITION_INDEX] is not start[POSITION_INDEX]:
-                currentState = visitedPositions[currentState[POSITION_INDEX]]
-                solution = [*solution, currentState[DIRECTION_INDEX]]
+			while currentState[POSITION_INDEX] is not start[POSITION_INDEX]:
+				currentState = visitedPositions[currentState[POSITION_INDEX]]
+				solution = [*solution, currentState[DIRECTION_INDEX]]
 
-            solution.reverse()
-            return solution
+			solution.reverse()
+			return solution
 
-        for successor in problem.getSuccessors(currentState[POSITION_INDEX]):
-            if not successor[POSITION_INDEX] in visitedPositions:
-                visitedPositions[successor[POSITION_INDEX]] = (currentState[POSITION_INDEX], successor[DIRECTION_INDEX])
-                queue.push(successor, successor[COST_INDEX])
+		for successor in problem.getSuccessors(currentState[POSITION_INDEX]):
+			if not successor[POSITION_INDEX] in visitedPositions:
+				visitedPositions[successor[POSITION_INDEX]] = (currentState[POSITION_INDEX], successor[DIRECTION_INDEX])
+				queue.push(successor, successor[COST_INDEX])
 
-    return None
+	return None
+
 
 def nullHeuristic(state, problem: SearchProblem = None):
-    """
+	"""
     A heuristic function estimates the cost from the current state to the nearest
     goal in the provided SearchProblem.  This heuristic is trivial.
     """
-    return 0
+	return 0
+
 
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
-    """Search the node that has the lowest combined cost and heuristic first."""
-    '''
+	"""Search the node that has the lowest combined cost and heuristic first."""
+	'''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 4 ICI
     '''
 
-    util.raiseNotDefined()
+	util.raiseNotDefined()
 
 
 # Abbreviations

@@ -210,8 +210,37 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
         INSÉREZ VOTRE SOLUTION À LA QUESTION 4 ICI
     '''
 
-	util.raiseNotDefined()
+	POSITION_INDEX = 0
+	DIRECTION_INDEX = 1
+	COST_INDEX = 2
 
+	visitedPositions = dict()
+	queue = util.PriorityQueue()
+	start = (problem.getStartState(), None, 0)  # Node format ( (x,y), Direction, cost)
+	queue.push(start, 0)
+	visitedPositions[start[POSITION_INDEX]] = [start[POSITION_INDEX], start[DIRECTION_INDEX], 0] # avoid enqueue of start
+
+	while not queue.isEmpty():
+		currentState = queue.pop()
+
+		if problem.isGoalState(currentState[POSITION_INDEX]):
+			solution = []
+
+			while currentState[POSITION_INDEX] is not start[POSITION_INDEX]:
+				currentState = visitedPositions[currentState[POSITION_INDEX]]
+				solution = [*solution, currentState[DIRECTION_INDEX]]
+
+			solution.reverse()
+			return solution
+
+		for successor in problem.getSuccessors(currentState[POSITION_INDEX]):
+			previousTotalCost = visitedPositions[currentState[POSITION_INDEX]][COST_INDEX]
+			cost = successor[COST_INDEX] + heuristic(successor[POSITION_INDEX], problem)
+			if not successor[POSITION_INDEX] in visitedPositions or successor[COST_INDEX] + previousTotalCost < visitedPositions[successor[POSITION_INDEX]][COST_INDEX]:
+				visitedPositions[successor[POSITION_INDEX]] = [currentState[POSITION_INDEX], successor[DIRECTION_INDEX], successor[COST_INDEX] + previousTotalCost]
+				queue.push(successor, previousTotalCost + cost)
+
+	return None
 
 # Abbreviations
 bfs = breadthFirstSearch

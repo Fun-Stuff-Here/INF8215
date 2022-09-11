@@ -171,7 +171,7 @@ def uniformCostSearch(problem: SearchProblem):
 	queue = util.PriorityQueue()
 	start = (problem.getStartState(), None, 0)  # Node format ( (x,y), Direction, cost)
 	queue.push(start, 0)
-	visitedPositions[start[POSITION_INDEX]] = (start[POSITION_INDEX], start[DIRECTION_INDEX])  # avoid enqueue of start
+	visitedPositions[start[POSITION_INDEX]] = [start[POSITION_INDEX], start[DIRECTION_INDEX], 0]  # avoid enqueue of start
 
 	while not queue.isEmpty():
 		currentState = queue.pop()
@@ -187,9 +187,11 @@ def uniformCostSearch(problem: SearchProblem):
 			return solution
 
 		for successor in problem.getSuccessors(currentState[POSITION_INDEX]):
-			if not successor[POSITION_INDEX] in visitedPositions:
-				visitedPositions[successor[POSITION_INDEX]] = (currentState[POSITION_INDEX], successor[DIRECTION_INDEX])
-				queue.push(successor, successor[COST_INDEX])
+			previousTotalCost = visitedPositions[currentState[POSITION_INDEX]][COST_INDEX]
+			if not successor[POSITION_INDEX] in visitedPositions or successor[COST_INDEX] + previousTotalCost < visitedPositions[successor[POSITION_INDEX]][COST_INDEX]:
+				visitedPositions[successor[POSITION_INDEX]] = [currentState[POSITION_INDEX], successor[DIRECTION_INDEX],
+															   successor[COST_INDEX] + previousTotalCost]
+				queue.push(successor, successor[COST_INDEX] + previousTotalCost)
 
 	return None
 

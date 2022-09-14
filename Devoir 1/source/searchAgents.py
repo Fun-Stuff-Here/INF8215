@@ -277,6 +277,14 @@ class CornersProblem(search.SearchProblem):
     You must select a suitable state space and successor function
     """
 
+    class Node:
+        def __init__(self, position, food):
+            self.position = position
+            self.food = food
+
+        def __hash__(self):
+            return hash(self.position) + hash(self.food)
+
     def __init__(self, startingGameState):
         """
         Stores the walls, pacman's starting position and corners.
@@ -284,14 +292,14 @@ class CornersProblem(search.SearchProblem):
         self.walls = startingGameState.getWalls()
         self.startingPosition = startingGameState.getPacmanPosition()
         top, right = self.walls.height-2, self.walls.width-2
-        self.corners = ((1,1), (1,top), (right, 1), (right, top))
+        self.corners = ((1, 1), (1, top), (right, 1), (right, top))
         for corner in self.corners:
             if not startingGameState.hasFood(*corner):
                 print('Warning: no food in corner ' + str(corner))
         self._expanded = 0 # DO NOT CHANGE; Number of search nodes expanded
         # Please add any code here which you would like to use
         # in initializing the problem
-  
+
         '''
             INSÉREZ VOTRE SOLUTION À LA QUESTION 5 ICI
         '''
@@ -306,10 +314,9 @@ class CornersProblem(search.SearchProblem):
         '''
             INSÉREZ VOTRE SOLUTION À LA QUESTION 5 ICI
         '''
-        
-        util.raiseNotDefined()
+        return self.Node(self.startingPosition, tuple())
 
-    def isGoalState(self, state):
+    def isGoalState(self, state: Node):
         """
         Returns whether this search state is a goal state of the problem.
         """
@@ -318,9 +325,9 @@ class CornersProblem(search.SearchProblem):
             INSÉREZ VOTRE SOLUTION À LA QUESTION 5 ICI
         '''
 
-        util.raiseNotDefined()
+        return len(state.food) >= len(self.corners)
 
-    def getSuccessors(self, state):
+    def getSuccessors(self, state: Node):
         """
         Returns successor states, the actions they require, and a cost of 1.
 
@@ -343,7 +350,20 @@ class CornersProblem(search.SearchProblem):
             '''
                 INSÉREZ VOTRE SOLUTION À LA QUESTION 5 ICI
             '''
-
+            x, y = state.position
+            foodEaten = tuple(state.food)
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            if not self.walls[nextx][nexty]:
+                nextStatePosition = (nextx, nexty)
+                if nextStatePosition in self.corners:
+                    for x in foodEaten:
+                        if x == nextStatePosition:
+                            break
+                    else:
+                        foodEaten = (nextStatePosition, *foodEaten)
+                cost = 1
+                successors.append((self.Node(nextStatePosition, foodEaten), action, cost))
 
         self._expanded += 1 # DO NOT CHANGE
         return successors

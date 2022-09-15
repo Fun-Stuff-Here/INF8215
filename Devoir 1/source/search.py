@@ -150,7 +150,7 @@ def breadthFirstSearch(problem: SearchProblem):
 			return solution
 
 		for successor in problem.getSuccessors(currentState[POSITION_INDEX]):
-			if not successor[POSITION_INDEX] in visitedPositions.keys():
+			if not successor[POSITION_INDEX] in visitedPositions:
 				visitedPositions[successor[POSITION_INDEX]] = (currentState[POSITION_INDEX], successor[DIRECTION_INDEX])
 				queue.push(successor)
 

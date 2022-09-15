@@ -285,6 +285,9 @@ class CornersProblem(search.SearchProblem):
         def __hash__(self):
             return hash(self.position) + hash(self.food)
 
+        def __eq__(self, other):
+            return self.position == other.position and self.food == other.food
+
     def __init__(self, startingGameState):
         """
         Stores the walls, pacman's starting position and corners.

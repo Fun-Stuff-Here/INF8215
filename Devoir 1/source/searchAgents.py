@@ -269,6 +269,16 @@ def euclideanHeuristic(position, problem, info={}):
 #####################################################
 # This portion is incomplete.  Time to write code!  #
 #####################################################
+class Node:
+    def __init__(self, position, food):
+        self.position = position
+        self.food = food
+
+    def __hash__(self):
+        return hash(self.position) + hash(self.food)
+
+    def __eq__(self, other):
+        return self.position == other.position and self.food == other.food
 
 class CornersProblem(search.SearchProblem):
     """
@@ -277,16 +287,6 @@ class CornersProblem(search.SearchProblem):
     You must select a suitable state space and successor function
     """
 
-    class Node:
-        def __init__(self, position, food):
-            self.position = position
-            self.food = food
-
-        def __hash__(self):
-            return hash(self.position) + hash(self.food)
-
-        def __eq__(self, other):
-            return self.position == other.position and self.food == other.food
 
     def __init__(self, startingGameState):
         """
@@ -317,7 +317,7 @@ class CornersProblem(search.SearchProblem):
         '''
             INSÉREZ VOTRE SOLUTION À LA QUESTION 5 ICI
         '''
-        return self.Node(self.startingPosition, tuple())
+        return Node(self.startingPosition, tuple())
 
     def isGoalState(self, state: Node):
         """
@@ -366,7 +366,7 @@ class CornersProblem(search.SearchProblem):
                     else:
                         foodEaten = (nextStatePosition, *foodEaten)
                 cost = 1
-                successors.append((self.Node(nextStatePosition, foodEaten), action, cost))
+                successors.append((Node(nextStatePosition, foodEaten), action, cost))
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
@@ -384,7 +384,7 @@ class CornersProblem(search.SearchProblem):
             if self.walls[x][y]: return 999999
         return len(actions)
 
-def cornersHeuristic(state, problem):
+def cornersHeuristic(state: Node, problem):
     """
     A heuristic for the CornersProblem that you defined.
 
@@ -403,8 +403,8 @@ def cornersHeuristic(state, problem):
     '''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 6 ICI
     '''
-    
-    return 0
+
+    return 50 * (4 - len(state.food))
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -501,7 +501,5 @@ def foodHeuristic(state, problem: FoodSearchProblem):
     '''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 7 ICI
     '''
-
-
-    return 0
-
+    PenaltyForNotEating = problem.startingGameState.data.layout.totalFood + len(foodGrid.asList())
+    return (foodGrid.height + foodGrid.width) * PenaltyForNotEating

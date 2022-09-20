@@ -496,10 +496,46 @@ def foodHeuristic(state, problem: FoodSearchProblem):
     Subsequent calls to this heuristic can access
     problem.heuristicInfo['wallCount']
     """
-    position, foodGrid = state
 
     '''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 7 ICI
     '''
-    PenaltyForNotEating = problem.startingGameState.data.layout.totalFood + len(foodGrid.asList())
-    return (foodGrid.height + foodGrid.width) * PenaltyForNotEating
+
+    if problem.isGoalState(state):
+        return 0
+
+    def FindRealDistance(position1, position2):
+        if not hasattr(problem, 'DistanceAlreadyCalculated'):
+            problem.DistanceAlreadyCalculated = dict()
+
+        if (position1, position2) in problem.DistanceAlreadyCalculated:
+            return problem.DistanceAlreadyCalculated[(position1, position2)]
+
+        findDistanceProblem = PositionSearchProblem(gameState=problem.startingGameState, goal=position2,
+                                                    start=position1, warn=False, visualize=False)
+        from search import breadthFirstSearch
+        searchResult = len(breadthFirstSearch(findDistanceProblem))
+        problem.DistanceAlreadyCalculated[(position1, position2)] = searchResult
+        return searchResult
+
+    position, foodGrid = state
+
+    foods = foodGrid.asList()
+    x1, y1 = position
+
+    from sys import maxsize
+    distanceMax, distanceMin = -maxsize, maxsize
+    distanceMaxPosition, distanceMinPosition = 0, 0
+    for foodPosition in foods:
+        distance = FindRealDistance(foodPosition, position)
+        if distance > distanceMax:
+            distanceMax = distance
+            distanceMaxPosition = foodPosition
+        if distance < distanceMin:
+            distanceMin = distance
+            distanceMinPosition = foodPosition
+
+    h1 = FindRealDistance(distanceMinPosition, distanceMaxPosition)
+    h2 = FindRealDistance(position, distanceMinPosition)
+
+    return h1 + h2

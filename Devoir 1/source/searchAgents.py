@@ -403,8 +403,63 @@ def cornersHeuristic(state: Node, problem):
     '''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 6 ICI
     '''
+    position = state.position
+    foods = list()
+    for food in corners:
+        if food not in state.food:
+            foods.append(food)
 
-    return 50 * (4 - len(state.food))
+    if problem.isGoalState(state):
+        return 0
+
+    class FakeGameState:
+        def __init__(self, walls, pacmanPosition, corners):
+            self.walls = walls
+            self.pacmanPosition = pacmanPosition
+            self.corners = corners
+
+        def getWalls(self):
+            return self.walls
+
+        def getPacmanPosition(self):
+            return self.pacmanPosition
+
+        def getNumFood(self):
+            return len(self.corners)
+
+        def hasFood(self, x, y):
+            return (x, y) in self.corners
+
+    def FindRealDistance(position1, position2):
+        if not hasattr(problem, 'DistanceAlreadyCalculated'):
+            problem.DistanceAlreadyCalculated = dict()
+
+        if (position1, position2) in problem.DistanceAlreadyCalculated:
+            return problem.DistanceAlreadyCalculated[(position1, position2)]
+
+        findDistanceProblem = PositionSearchProblem(gameState=FakeGameState(walls, position, corners), goal=position2,
+                                                    start=position1, warn=False, visualize=False)
+        from search import breadthFirstSearch
+        searchResult = len(breadthFirstSearch(findDistanceProblem))
+        problem.DistanceAlreadyCalculated[(position1, position2)] = searchResult
+        return searchResult
+
+    from sys import maxsize
+    distanceMax, distanceMin = -maxsize, maxsize
+    distanceMaxPosition, distanceMinPosition = 0, 0
+    for foodPosition in foods:
+        distance = FindRealDistance(foodPosition, position)
+        if distance > distanceMax:
+            distanceMax = distance
+            distanceMaxPosition = foodPosition
+        if distance < distanceMin:
+            distanceMin = distance
+            distanceMinPosition = foodPosition
+
+    h1 = FindRealDistance(distanceMinPosition, distanceMaxPosition)
+    h2 = FindRealDistance(position, distanceMinPosition)
+
+    return h1 + h2
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -519,9 +574,7 @@ def foodHeuristic(state, problem: FoodSearchProblem):
         return searchResult
 
     position, foodGrid = state
-
     foods = foodGrid.asList()
-    x1, y1 = position
 
     from sys import maxsize
     distanceMax, distanceMin = -maxsize, maxsize

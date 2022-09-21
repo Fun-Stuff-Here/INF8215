@@ -267,7 +267,7 @@ def serve_agent(agent, address, port):
     from xmlrpc.server import SimpleXMLRPCServer
     server = SimpleXMLRPCServer((address, port), allow_none=True)
     server.register_instance(agent)
-    print("Listening on ", address, ":", port, sep="")
+    print("Listening on ", address, ":", port)
     try:
         server.serve_forever()
     except KeyboardInterrupt:

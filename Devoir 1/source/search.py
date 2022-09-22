@@ -94,7 +94,11 @@ def depthFirstSearch(problem: SearchProblem):
 	'''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 1 ICI
     '''
+	return recursiveDFS(problem)
+	#return iterativeDFS(problem)
 
+
+def recursiveDFS(problem):
 	POSITION_INDEX = 0
 	DIRECTION_INDEX = 1
 
@@ -119,6 +123,47 @@ def depthFirstSearch(problem: SearchProblem):
 	solution = depthFirstSearchRecursive(searchProblem=problem, currentState=start, visitedPositions=visitedPositions)
 	return solution[1:] if solution is not None else []
 
+
+def iterativeDFS(problem):
+	POSITION_INDEX = 0
+	ACTION_INDEX = 1
+	PREVIOUS_POSITION_INDEX = 2
+
+	startPosition = problem.getStartState()
+	fullState = (startPosition, None, None)
+	stack = util.Stack()
+	stack.push(fullState)
+	visitedStates = {}
+	hasFoundSolution = False
+
+	while not stack.isEmpty():
+		state = stack.pop()
+		visitedStates[state[POSITION_INDEX]] = (state[ACTION_INDEX], state[PREVIOUS_POSITION_INDEX])
+		if problem.isGoalState(state[POSITION_INDEX]):
+			hasFoundSolution = True
+			break
+		successors = problem.getSuccessors(state[POSITION_INDEX])
+		for successor in successors:
+			if successor[POSITION_INDEX] not in visitedStates.keys():
+				stack.push((successor[POSITION_INDEX], successor[ACTION_INDEX], state[POSITION_INDEX]))
+
+	solution = []
+	position = state[POSITION_INDEX]
+
+	VISITED_STATES_ACTION_INDEX = 0
+	VISITED_STATES_PREVIOUS_POS_INDEX = 1
+
+	if hasFoundSolution:
+		pathIsComplete = False
+		while not pathIsComplete:
+			if visitedStates[position] == (None, None):
+				pathIsComplete = True
+				continue
+			solution.append(visitedStates[position][VISITED_STATES_ACTION_INDEX])
+			position = visitedStates[position][VISITED_STATES_PREVIOUS_POS_INDEX]
+
+	solution.reverse()
+	return solution
 
 def breadthFirstSearch(problem: SearchProblem):
 	"""Search the shallowest nodes in the search tree first."""

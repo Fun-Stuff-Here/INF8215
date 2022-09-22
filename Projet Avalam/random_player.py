@@ -2,7 +2,7 @@
 """
 Dummy random Avalam agent.
 Copyright (C) 2022, Teaching team of the course INF8215 
-Polytechnique Montréal
+Polytechnique Montreal
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

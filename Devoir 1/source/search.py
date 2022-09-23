@@ -94,37 +94,6 @@ def depthFirstSearch(problem: SearchProblem):
 	'''
         INSÉREZ VOTRE SOLUTION À LA QUESTION 1 ICI
     '''
-	return recursiveDFS(problem)
-	#return iterativeDFS(problem)
-
-
-def recursiveDFS(problem):
-	POSITION_INDEX = 0
-	DIRECTION_INDEX = 1
-
-	def depthFirstSearchRecursive(searchProblem: SearchProblem, currentState, visitedPositions: set):
-		if searchProblem.isGoalState(currentState[POSITION_INDEX]):
-			return [currentState[DIRECTION_INDEX]]
-
-		for successor in searchProblem.getSuccessors(currentState[POSITION_INDEX]):
-			if not successor[POSITION_INDEX] in visitedPositions:
-				visitedPositions.add(successor[POSITION_INDEX])
-				childStateSolution = depthFirstSearchRecursive(searchProblem=searchProblem, currentState=successor,
-															   visitedPositions=visitedPositions)
-				if childStateSolution is not None:
-					return [currentState[DIRECTION_INDEX], *childStateSolution]
-
-		return None
-
-	start = (problem.getStartState(), None, 0)
-	visitedPositions = set()
-	visitedPositions.add(start[POSITION_INDEX])
-
-	solution = depthFirstSearchRecursive(searchProblem=problem, currentState=start, visitedPositions=visitedPositions)
-	return solution[1:] if solution is not None else []
-
-
-def iterativeDFS(problem):
 	POSITION_INDEX = 0
 	ACTION_INDEX = 1
 	PREVIOUS_POSITION_INDEX = 2

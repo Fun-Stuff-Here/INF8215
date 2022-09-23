@@ -142,7 +142,6 @@ def breadthFirstSearch(problem: SearchProblem):
     '''
 	POSITION_INDEX = 0
 	DIRECTION_INDEX = 1
-	COST_INDEX = 2
 
 	visitedPositions = dict()
 	queue = util.Queue()

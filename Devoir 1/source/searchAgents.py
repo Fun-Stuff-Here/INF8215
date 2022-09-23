@@ -413,6 +413,9 @@ def cornersHeuristic(state: Node, problem):
         return 0
 
     class FakeGameState:
+        """
+        Game state use as a stub for Position search problem
+        """
         def __init__(self, walls, pacmanPosition, corners):
             self.walls = walls
             self.pacmanPosition = pacmanPosition
@@ -458,7 +461,11 @@ def cornersHeuristic(state: Node, problem):
 
     h1 = FindRealDistance(distanceMinPosition, distanceMaxPosition)
     h2 = FindRealDistance(position, distanceMinPosition)
-
+    """
+    L'heuristique consiste a prendre la distance reelle entre pacman et la nourriture la plus proche ainsi que
+    la distance de la nourriture la plus proche et celle la plus loin.
+    L'idee est de faire la relaxiation qu'il n'y a que deux points de nourriture a manger pour pacman 
+    """
     return h1 + h2
 
 class AStarCornersAgent(SearchAgent):
@@ -591,4 +598,9 @@ def foodHeuristic(state, problem: FoodSearchProblem):
     h1 = FindRealDistance(distanceMinPosition, distanceMaxPosition)
     h2 = FindRealDistance(position, distanceMinPosition)
 
+    """
+    L'heuristique consiste a prendre la distance reelle entre pacman et la nourriture la plus proche ainsi que
+    la distance de la nourriture la plus proche et celle la plus loin.
+    L'idee est de faire la relaxiation qu'il n'y a que deux points de nourriture a manger pour pacman 
+    """
     return h1 + h2

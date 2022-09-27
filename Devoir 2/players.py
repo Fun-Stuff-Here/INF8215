@@ -18,11 +18,31 @@ def minimax_search(game, state):
 
     def max_value(state):
         # TODO: include a recursive call to min_value function
-        raise Exception("Function not implemented")
+        if game.is_terminal(state):
+            return game.utility(state, player), None
+        v_star = -infinity
+        m_star = None
+        for a in game.actions(state):
+            state_prime = game.result(state, a)
+            v, _ = min_value(state_prime)
+            if v > v_star:
+                v_star = v
+                m_star = a
+        return v_star, m_star
 
     def min_value(state):
         # TODO: include a recursive call to max_value function
-        raise Exception("Function not implemented")
+        if game.is_terminal(state):
+            return game.utility(state, player), None
+        v_star = infinity
+        m_star = None
+        for a in game.actions(state):
+            state_prime = game.result(state, a)
+            v, _ = max_value(state_prime)
+            if v < v_star:
+                v_star = v
+                m_star = a
+        return v_star, m_star
     
 
     return max_value(state)
@@ -37,11 +57,37 @@ def alphabeta_search(game, state):
 
     def max_value(state, alpha, beta):
         # TODO: include a recursive call to min_value function
-        raise Exception("Function not implemented")
+        if game.is_terminal(state):
+            return game.utility(state, player), None
+        v_star = -infinity
+        m_star = None
+        for a in game.actions(state):
+            state_prime = game.result(state, a)
+            v, _ = min_value(state_prime, alpha, beta)
+            if v > v_star:
+                v_star = v
+                m_star = a
+                alpha = max(alpha, v_star)
+            if v_star >= beta:
+                return v_star, m_star
+        return v_star, m_star
 
     def min_value(state, alpha, beta):
         # TODO: include a recursive call to max_value function
-        raise Exception("Function not implemented")
+        if game.is_terminal(state):
+            return game.utility(state, player), None
+        v_star = infinity
+        m_star = None
+        for a in game.actions(state):
+            state_prime = game.result(state, a)
+            v, _ = max_value(state_prime, alpha, beta)
+            if v < v_star:
+                v_star = v
+                m_star = a
+                beta = min(beta, v_star)
+            if v_star <= alpha:
+                return v_star, m_star
+        return v_star, m_star
 
     return max_value(state, -infinity, +infinity)
 

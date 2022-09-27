@@ -1,0 +1,11 @@
+name: AI
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pip=22.1.2
+  - pip:
+    - numba==0.55.1
+    - panda==0.3.1
+    - numpy==1.21.5

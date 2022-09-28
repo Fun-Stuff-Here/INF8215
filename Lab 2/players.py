@@ -2,6 +2,7 @@
 
 import math
 import random
+from numba import njit
 
 def random_player(game, state): 
     """A game player who plays randomly"""
@@ -55,6 +56,7 @@ def alphabeta_search(game, state):
 
     player = state.to_move
 
+    @njit()
     def max_value(state, alpha, beta):
         # TODO: include a recursive call to min_value function
         if game.is_terminal(state):
@@ -72,6 +74,7 @@ def alphabeta_search(game, state):
                 return v_star, m_star
         return v_star, m_star
 
+    @njit()
     def min_value(state, alpha, beta):
         # TODO: include a recursive call to max_value function
         if game.is_terminal(state):

@@ -1,0 +1,80 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "random player on port 8000",
+            "type": "python",
+            "request": "launch",
+            "program": "random_player.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8000"]
+        },
+        {
+            "name": "greedy player on port 8010",
+            "type": "python",
+            "request": "launch",
+            "program": "greedy_player.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8010"]
+        },
+        {
+            "name": "my player on port 8020",
+            "type": "python",
+            "request": "launch",
+            "program": "my_player.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8020"]
+        },
+        {
+            "name": "game port 8000 et port 8010",
+            "type": "python",
+            "request": "launch",
+            "program": "game.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["http://localhost:8000", "http://localhost:8010", "--time", "900"]
+        },
+        {
+            "name": "game port 8000 et port 8020",
+            "type": "python",
+            "request": "launch",
+            "program": "game.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["http://localhost:8000", "http://localhost:8020", "--time", "900"]
+        },
+        {
+            "name": "game port 8000 et port 8010",
+            "type": "python",
+            "request": "launch",
+            "program": "game.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["http://localhost:8000", "http://localhost:8010", "--time", "900"]
+        },
+        {
+            "name": "game port 8020 et human",
+            "type": "python",
+            "request": "launch",
+            "program": "game.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["http://localhost:8020", "humain", "--time", "900"]
+        },
+        {
+            "name": "game human et human",
+            "type": "python",
+            "request": "launch",
+            "program": "game.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["human", "human", "--time", "900"]
+        },
+    ]
+}

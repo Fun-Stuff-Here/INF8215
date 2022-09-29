@@ -1,0 +1,104 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Devoir 2 : test",
+            "type": "python",
+            "request": "launch",
+            "program": "Devoir 2/main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--scenario",
+                "test",
+            ]
+        },
+        {
+            "name": "Python Devoir 2 : S1",
+            "type": "python",
+            "request": "launch",
+            "program": "Devoir 2/main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--scenario",
+                "S1",
+            ]
+        },
+        {
+            "name": "Python Devoir 2 : S2",
+            "type": "python",
+            "request": "launch",
+            "program": "Devoir 2/main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--scenario",
+                "S2",
+            ]
+        },
+        {
+            "name": "Python Devoir 2 : S3",
+            "type": "python",
+            "request": "launch",
+            "program": "Devoir 2/main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--scenario",
+                "S3",
+            ]
+        },
+        {
+            "name": "Python Devoir 2 : S4",
+            "type": "python",
+            "request": "launch",
+            "program": "Devoir 2/main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--scenario",
+                "S4",
+            ]
+        },
+        {
+            "name": "Python Devoir 2 : S5",
+            "type": "python",
+            "request": "launch",
+            "program": "Devoir 2/main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--scenario",
+                "S5",
+            ]
+        },
+        {
+            "name": "Python Devoir 2 : S6",
+            "type": "python",
+            "request": "launch",
+            "program": "Devoir 2/main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--scenario",
+                "S6",
+            ]
+        },
+        {
+            "name": "Python Devoir 2 : S7",
+            "type": "python",
+            "request": "launch",
+            "program": "Devoir 2/main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--scenario",
+                "S",
+            ]
+        },
+    ],
+}

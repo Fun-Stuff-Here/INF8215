@@ -65,7 +65,7 @@
             "program": "game.py",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["http://localhost:8020", "humain", "--time", "900"]
+            "args": ["http://localhost:8020", "human", "--time", "900"]
         },
         {
             "name": "game human et human",

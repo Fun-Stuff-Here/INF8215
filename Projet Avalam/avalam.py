@@ -275,6 +275,7 @@ def serve_agent(agent, address, port):
 
 
 def agent_main(agent, args_cb=None, setup_cb=None):
+    
     """Launch agent server depending on arguments.
     Arguments:
     agent -- an Agent instance

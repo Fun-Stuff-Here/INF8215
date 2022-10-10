@@ -32,6 +32,15 @@
             "args": ["--bind", "localhost", "--port", "8020"]
         },
         {
+            "name": "basic player on port 8020",
+            "type": "python",
+            "request": "launch",
+            "program": "Basic_player.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8020"]
+        },
+        {
             "name": "game port 8000 et port 8010",
             "type": "python",
             "request": "launch",

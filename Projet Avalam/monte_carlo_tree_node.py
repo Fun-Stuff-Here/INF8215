@@ -10,7 +10,6 @@ https://www.geeksforgeeks.org/left-child-right-sibling-representation-tree/
 https://en.wikipedia.org/wiki/Left-child_right-sibling_binary_tree
 """
 from numba import int64, deferred_type, optional
-from numba.types import float64, int64
 from numba.experimental import jitclass
 from numpy import sqrt, inf, log
 from avalam import Board

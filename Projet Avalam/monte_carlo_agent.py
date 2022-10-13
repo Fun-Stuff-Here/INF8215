@@ -24,7 +24,6 @@ from njitavalam import Board, PLAYER1
 from random_actions import random_action
 from monte_carlo_tree_search import monte_carlo_tree_search
 
-@njit(debug=True)
 def play(board, player:int, step:int, time_left:int):
     """
     This function is used to play a move according
@@ -45,7 +44,12 @@ def play(board, player:int, step:int, time_left:int):
     if time_left < 2:
         return random_action(board)
 
-    return monte_carlo_tree_search(board, player, step, time_left)
+    # Monte Carlo Tree Search
+    try:
+        return monte_carlo_tree_search(board, player, step, time_left)
+    except Exception as error: #pylint: disable=broad-except
+        print(error)
+        return random_action(board)
 
 class MyAgent(Agent):
 

@@ -2,22 +2,25 @@
   Avalam numba compatible
 """
 from numba.experimental import jitclass
-from numba.types import int64
+from numba.types import int64, optional, Tuple
+from numba.typed import List # pylint: disable=no-name-in-module
 import numpy as np
 
-PLAYER1 = 1
-PLAYER2 = -1
+# (negative for red, positive for yellow)
+PLAYER1 = 1 # yellow
+PLAYER2 = -1 # red
+YELLOW = PLAYER1
+RED = PLAYER2
 
-board_decriptor = [
+@jitclass([
     ('max_height', int64),
     ('initial_board', int64[:,:]),
     ('m', int64[:,:]),
     ('rows', int64),
     ('columns', int64),
-    ('max_height', int64)
-]
-
-@jitclass(board_decriptor)
+    ('max_height', int64),
+    ('last_action', optional(Tuple([int64, int64, int64, int64]))),
+])
 class Board:
 
     """Representation of an Avalam Board.
@@ -38,7 +41,7 @@ class Board:
                                 [ 0,  0,  0,  0, -1,  1, -1,  1,  0],
                                 [ 0,  0,  0,  0,  0, -1,  1,  0,  0] ]),
                        max_height=5,
-                       invert=False):
+                       invert=False) -> None:
         """Initialize the board.
 
         Arguments:
@@ -59,15 +62,16 @@ class Board:
                                 [ 0,  0,  1, -1,  1, -1,  1, -1,  0],
                                 [ 0,  0,  0,  0, -1,  1, -1,  1,  0],
                                 [ 0,  0,  0,  0,  0, -1,  1,  0,  0] ])
-        self.m = percepts
+        self.m = percepts # pylint: disable=invalid-name
         self.rows = len(self.m)
         self.columns = len(self.m[0])
         self.max_height = max_height
         self.m = self.get_percepts(invert)  # make a copy of the percepts
+        self.last_action = None
 
-    def __str__(self):
+    def __str__(self) -> str:
         def str_cell(i, j):
-            x = self.m[i][j]
+            x = self.m[i][j] # pylint: disable=invalid-name
             if x:
                 return "%+2d" % x
             else:
@@ -111,19 +115,21 @@ class Board:
 
     def get_tower_actions(self, i, j):
         """Yield all actions with moving tower (i,j)"""
-        h = abs(self.m[i][j])
+        h = abs(self.m[i][j]) # pylint: disable=invalid-name
         if h > 0 and h < self.max_height:
-            for di in (-1, 0, 1):
-                for dj in (-1, 0, 1):
+            for di in (-1, 0, 1): # pylint: disable=invalid-name
+                for dj in (-1, 0, 1): # pylint: disable=invalid-name
                     action = (i, j, i+di, j+dj)
                     if self.is_action_valid(action):
                         yield action
 
-    def get_actions(self):
+    def get_actions(self) -> list[tuple[int, int, int, int]]:
         """Yield all valid actions on this board."""
-        for i, j, h in self.get_towers():
+        actions = List()
+        for i, j, _ in self.get_towers():
             for action in self.get_tower_actions(i, j):
-                yield action
+                actions.append(action)
+        return actions
 
     def play_action(self, action):
         """Play an action if it is valid.
@@ -135,19 +141,20 @@ class Board:
         """
         if not self.is_action_valid(action):
             return self
-        i1, j1, i2, j2 = action
-        h1 = abs(self.m[i1][j1])
-        h2 = abs(self.m[i2][j2])
+        i1, j1, i2, j2 = action # pylint: disable=invalid-name
+        h1 = abs(self.m[i1][j1]) # pylint: disable=invalid-name
+        h2 = abs(self.m[i2][j2]) # pylint: disable=invalid-name
         if self.m[i1][j1] < 0:
             self.m[i2][j2] = -(h1 + h2)
         else:
             self.m[i2][j2] = h1 + h2
         self.m[i1][j1] = 0
+        self.last_action = action
         return self
 
     def is_finished(self):
         """Return whether no more moves can be made (i.e., game finished)."""
-        for action in self.get_actions():
+        for _ in self.get_actions():
             return False
         return True
 
@@ -178,21 +185,21 @@ class Board:
 
     def is_tower_movable(self, i, j):
         """Return wether tower (i,j) is movable"""
-        for action in self.get_tower_actions(i, j):
+        for _ in self.get_tower_actions(i, j):
             return True
         return False
 
     def is_action_valid(self, action):
         """Return whether action is a valid action."""
 
-        i1, j1, i2, j2 = action
+        i1, j1, i2, j2 = action # pylint: disable=invalid-name
         if i1 < 0 or j1 < 0 or i2 < 0 or j2 < 0 or \
             i1 >= self.rows or j1 >= self.columns or \
             i2 >= self.rows or j2 >= self.columns or \
             (i1 == i2 and j1 == j2) or (abs(i1-i2) > 1) or (abs(j1-j2) > 1):
             return False
-        h1 = abs(self.m[i1][j1])
-        h2 = abs(self.m[i2][j2])
+        h1 = abs(self.m[i1][j1]) # pylint: disable=invalid-name
+        h2 = abs(self.m[i2][j2]) # pylint: disable=invalid-name
         if h1 <= 0 or h1 >= self.max_height or h2 <= 0 or \
                 h2 >= self.max_height or h1+h2 > self.max_height:
             return False

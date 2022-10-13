@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Avalam agent.
-Copyright (C) 2022, <<<<<<<<<<< YOUR NAMES HERE >>>>>>>>>>>
+Copyright (C) 2022, Elizabeth Michaud 2073093, Nicolas Dépelteau 2083544
 Polytechnique Montréal
 
 This program is free software; you can redistribute it and/or modify

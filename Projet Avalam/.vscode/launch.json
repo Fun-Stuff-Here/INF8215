@@ -41,6 +41,15 @@
             "args": ["--bind", "localhost", "--port", "8020"]
         },
         {
+            "name": "Monte Carlo player on port 8020",
+            "type": "python",
+            "request": "launch",
+            "program": "monte_carlo_agent.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8020"]
+        },
+        {
             "name": "game port 8000 et port 8010",
             "type": "python",
             "request": "launch",

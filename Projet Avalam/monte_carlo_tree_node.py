@@ -135,7 +135,7 @@ class MCTS_Node: # pylint: disable=invalid-name
 
     def rollout(self):
         """
-        Simulate a random playout from this node
+        Simulate a playout from this node
         """
         current_rollout_state: Board = self.state.clone()
         while not current_rollout_state.is_finished():

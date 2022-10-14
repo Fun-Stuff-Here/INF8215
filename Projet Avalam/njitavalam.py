@@ -7,6 +7,7 @@ from numba.typed import List # pylint: disable=no-name-in-module
 import numpy as np
 
 # (negative for red, positive for yellow)
+# this score represents the winner (<0: red, >0: yellow, 0: draw).
 PLAYER1 = 1 # yellow
 PLAYER2 = -1 # red
 YELLOW = PLAYER1

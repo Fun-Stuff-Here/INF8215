@@ -64,7 +64,8 @@ class MCTS_Node: # pylint: disable=invalid-name
                     next_state = self.state.clone().play_action(action)
                     sibling.next = MCTS_Node(next_state, self)
                     sibling = sibling.next
-        return self.child
+                return self.child
+        return self
 
     @property
     def is_leaf(self):

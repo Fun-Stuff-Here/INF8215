@@ -34,8 +34,8 @@ def monte_carlo_tree_search(board, player:int, step:int, time_left:int):
     """
     Returns best action from monte-carlo tree search
     """
-    root = Node(board, None)
-    return monte_carlo_algo(root, player, time_condition)
+    root = Node(board, None, player)
+    return monte_carlo_algo(root, player, time_condition, step)
 
 @njit()
 def tree_policy(node:Node, player:int):
@@ -57,17 +57,20 @@ def tree_policy(node:Node, player:int):
     return best_child_found
 
 @njit()
-def best_action(root: Node):
+def best_action(root: Node, player:int, step:int):
     """
     returns the best action to take
     """
+
+    print("n_simulations", root.n_simulations)
+
     best_child:Node = root.best_child()
     if best_child is None:
-        return root.rollout_policy(root.state.get_actions())
+        return root.rollout_policy(root.state, player, step)
     return best_child.state.last_action
 
 @njit()
-def monte_carlo_algo(root:Node, player: int, stop_condition):
+def monte_carlo_algo(root:Node, player: int, stop_condition, step:int):
     """
     Hold the algorithm of monte-carlo tree search
     """
@@ -82,7 +85,7 @@ def monte_carlo_algo(root:Node, player: int, stop_condition):
         if current_node.n_simulations != 0:
             current_node = current_node.expand()
 
-        utility = current_node.rollout()
+        utility = current_node.rollout(step)
         current_node.backpropagate(utility)
 
-    return best_action(root)
+    return best_action(root, player, step)

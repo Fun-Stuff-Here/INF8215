@@ -18,6 +18,14 @@ class AlphaBetaPruningAgent(Agent):
     def __init__(self):
         self.cutoff_depth = 2
 
+    def update_cutoff_depth(self, step:int):
+        if step < 12:
+            self.cutoff_depth = 2
+        if step == 12:
+            self.cutoff_depth = 3
+        if step > 12:
+            self.cutoff_depth = 6
+
     def play(self, percepts:dict, player:int, step:int, time_left:int):
         """
         Play a move
@@ -32,6 +40,7 @@ class AlphaBetaPruningAgent(Agent):
         try:
             if time_left < 2.0:
                 raise Exception("not enough time left")
+            self.update_cutoff_depth(step)
             action = alpha_beta_pruning_search(percepts, player, self.cutoff_depth)
             if board_copy.is_action_valid(action):
                 return action

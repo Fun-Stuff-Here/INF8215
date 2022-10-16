@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Avalam agent.
 Copyright (C) 2022, Elizabeth Michaud 2073093, Nicolas Dépelteau 2083544
@@ -15,15 +16,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 
-Recherche d'arbre de Monte Carlo
 """
 from numpy import array, int64
 from avalam import Agent, agent_main
 from njitavalam import Board, PLAYER1
 from random_actions import random_action
-from monte_carlo_tree_search import monte_carlo_tree_search
+from quick_action import quick_action
 
-class MyAgent(Agent):
+class BasicAgent(Agent):
 
     """My Avalam agent."""
 
@@ -41,7 +41,7 @@ class MyAgent(Agent):
         try:
             if time_left < 2.0:
                 raise Exception("not enough time left")
-            action = monte_carlo_tree_search(Board(board_array, percepts['max_height']), player, step, time_left)
+            action = quick_action(Board(board_array, percepts['max_height']), player)
             if board_copy.is_action_valid(action):
                 return action
             raise Exception("Invalid action")
@@ -50,7 +50,7 @@ class MyAgent(Agent):
             return random_action(board_copy)
 
 if __name__ == "__main__":
-    my_agent = MyAgent()
+    my_agent = BasicAgent()
     percepts = { "m":[ [ 0,  0,  1, -1,  0,  0,  0,  0,  0],
                                 [ 0,  1, -1,  1, -1,  0,  0,  0,  0],
                                 [ 0, -1,  1, -1,  1, -1,  1,  0,  0],

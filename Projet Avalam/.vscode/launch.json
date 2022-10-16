@@ -32,22 +32,13 @@
             "args": ["--bind", "localhost", "--port", "8020"]
         },
         {
-            "name": "minimax agent on port 8020",
+            "name": "minimax agent on port 8010",
             "type": "python",
             "request": "launch",
             "program": "minimax_agent.py",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["--bind", "localhost", "--port", "8020"]
-        },
-        {
-            "name": "basic player on port 8020",
-            "type": "python",
-            "request": "launch",
-            "program": "Basic_player.py",
-            "console": "integratedTerminal",
-            "justMyCode": true,
-            "args": ["--bind", "localhost", "--port", "8020"]
+            "args": ["--bind", "localhost", "--port", "8010"]
         },
         {
             "name": "Monte Carlo player on port 8020",
@@ -59,6 +50,15 @@
             "args": ["--bind", "localhost", "--port", "8020"]
         },
         {
+            "name": "Basic player on port 8000",
+            "type": "python",
+            "request": "launch",
+            "program": "basic_agent.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8000"]
+        },
+        {
             "name": "game port 8000 et port 8010",
             "type": "python",
             "request": "launch",
@@ -66,6 +66,15 @@
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": ["http://localhost:8000", "http://localhost:8010", "--time", "900"]
+        },
+        {
+            "name": "game port 8010 et port 8020",
+            "type": "python",
+            "request": "launch",
+            "program": "game.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["http://localhost:8010", "http://localhost:8020", "--time", "900"]
         },
         {
             "name": "game port 8000 et port 8020",

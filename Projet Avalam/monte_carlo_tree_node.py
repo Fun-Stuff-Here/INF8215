@@ -14,7 +14,8 @@ from numba.experimental import jitclass
 from numpy import sqrt, inf, log
 from avalam import Board
 from njitavalam import YELLOW, RED, Board as AvalamState
-from random_actions import choose_random_actions
+from minimax_search import alpha_beta_pruning_algo
+from quick_action import quick_action
 
 node_type = deferred_type()
 
@@ -25,18 +26,20 @@ node_type = deferred_type()
     ('next', optional(node_type)),
     ('utility', int64),
     ('n_simulations', int64),
+    ('player', int64),
 ])
 class MCTS_Node: # pylint: disable=invalid-name
     """
     Noeud de monte carlo tree search
     """
-    def __init__(self, state: AvalamState, parent):
+    def __init__(self, state: AvalamState, parent, player:int):
         self.state = state
         self.parent = parent
         self.child = None
         self.next = None
         self.utility = 0
         self.n_simulations = 0
+        self.player = player
 
     @property
     def children(self):
@@ -58,11 +61,11 @@ class MCTS_Node: # pylint: disable=invalid-name
             actions = self.state.get_actions()
             if len(actions) > 0:
                 next_state = self.state.clone().play_action(actions[0])
-                sibling = MCTS_Node(next_state, self)
+                sibling = MCTS_Node(next_state, self, self.player * -1)
                 self.child = sibling
                 for action in actions[1:]:
                     next_state = self.state.clone().play_action(action)
-                    sibling.next = MCTS_Node(next_state, self)
+                    sibling.next = MCTS_Node(next_state, self, self.player * -1)
                     sibling = sibling.next
                 return self.child
         return self
@@ -128,25 +131,37 @@ class MCTS_Node: # pylint: disable=invalid-name
 
         return best_child_found
 
-    def rollout_policy(self, possible_moves):
+    def rollout_policy(self, state:AvalamState, player:int, step:int):
         """
-        Random policy used for the rollout
+        policy used for the rollout
         """
-        return choose_random_actions(possible_moves)
+        if step < 10:
+            return quick_action(state, player)
+        cutoff_depth = 1
+        if step >= 10 and step < 14:
+            cutoff_depth = 2
+        if step == 14:
+            cutoff_depth = 3
+        if step > 14:
+            cutoff_depth = 6
+        return alpha_beta_pruning_algo(state, player, cutoff_depth)
 
-    def rollout(self):
+    def rollout(self, step:int):
         """
         Simulate a playout from this node
         """
         current_rollout_state: Board = self.state.clone()
+        current_player = self.player
+        current_step = step
         while not current_rollout_state.is_finished():
-            possible_moves = current_rollout_state.get_actions()
-            action = self.rollout_policy(possible_moves)
+            action = self.rollout_policy(current_rollout_state, current_player, current_step)
             current_rollout_state = current_rollout_state.play_action(action)
+            current_player = current_player * -1
+            current_step += 1
         return current_rollout_state.get_score()
 
 node_type.define(MCTS_Node.class_type.instance_type) # pylint: disable=no-member
 
 if __name__ == "__main__":
     state1 = AvalamState()
-    n = MCTS_Node(state1, None)
+    n = MCTS_Node(state1, None, 1)

@@ -16,6 +16,7 @@ from avalam import Board
 from njitavalam import YELLOW, RED, Board as AvalamState
 from minimax_search import alpha_beta_pruning_algo
 from quick_action import quick_action
+from random_actions import random_action
 
 node_type = deferred_type()
 
@@ -135,16 +136,7 @@ class MCTS_Node: # pylint: disable=invalid-name
         """
         policy used for the rollout
         """
-        if step < 10:
-            return quick_action(state, player)
-        cutoff_depth = 1
-        if step >= 10 and step < 14:
-            cutoff_depth = 2
-        if step == 14:
-            cutoff_depth = 3
-        if step > 14:
-            cutoff_depth = 6
-        return alpha_beta_pruning_algo(state, player, cutoff_depth)
+        return random_action(state)
 
     def rollout(self, step:int):
         """

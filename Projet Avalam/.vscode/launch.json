@@ -104,6 +104,15 @@
             "args": ["http://localhost:8020", "human", "--time", "900"]
         },
         {
+            "name": "game port 8010 et human",
+            "type": "python",
+            "request": "launch",
+            "program": "game.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["http://localhost:8010", "human", "--time", "900"]
+        },
+        {
             "name": "game human et human",
             "type": "python",
             "request": "launch",

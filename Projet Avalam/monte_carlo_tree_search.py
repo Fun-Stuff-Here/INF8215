@@ -27,7 +27,7 @@ def time_condition(start_time:float, current_time:float):
     This function is used to stop the monte carlo tree search
     Returns true if the time is up
     """
-    return np_abs(current_time - start_time) > 2.0 #seconds
+    return np_abs(current_time - start_time) > 6.0 #seconds
 
 @njit()
 def monte_carlo_tree_search(board, player:int, step:int, time_left:int):

@@ -7,6 +7,7 @@ Polytechnique Montréal
 from numpy import inf, array, int64
 from numba import njit
 from njitavalam import Board as AvalamState, RED
+from heuristics import heuristic_isolation
 
 def alpha_beta_pruning_search(percepts:dict, player:int, cutoff_depth:int):
     """
@@ -19,7 +20,6 @@ def alpha_beta_pruning_search(percepts:dict, player:int, cutoff_depth:int):
     board_array = array(percepts['m'], dtype=int64)
     return alpha_beta_pruning_algo(AvalamState(board_array, percepts['max_height']), player, cutoff_depth)
 
-@njit()
 def heuristic(state:AvalamState, player:int):
     """
     Heuristic function
@@ -27,9 +27,8 @@ def heuristic(state:AvalamState, player:int):
     :param player: the player to control in this step (-1 or 1)
     :return: the heuristic value
     """
-    return state.get_score()
+    return heuristic_isolation(state, player)
 
-@njit()
 def max_value(state:AvalamState, player:int, alpha:int, beta:int, depth:int, cutoff_depth:int):
     """
     Max value function for alpha beta pruning yellow percpective
@@ -53,7 +52,6 @@ def max_value(state:AvalamState, player:int, alpha:int, beta:int, depth:int, cut
             return best_score, best_move
     return best_score, best_move
 
-@njit()
 def min_value(state:AvalamState, player:int, alpha:int, beta:int, depth:int, cutoff_depth:int):
     """
     Min value function for alpha beta pruning red percepctive
@@ -77,7 +75,6 @@ def min_value(state:AvalamState, player:int, alpha:int, beta:int, depth:int, cut
             return best_score, best_move
     return best_score, best_move
 
-@njit()
 def alpha_beta_pruning_algo(state:AvalamState, player:int, cutoff_depth:int):
     """
     Alpha-Beta Pruning search

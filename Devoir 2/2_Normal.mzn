@@ -1,3 +1,8 @@
+% Copyright (C) 2022, Elizabeth Michaud 2073093, Nicolas Dépelteau 2083544
+% Polytechnique Montréal
+%
+% Problème 2 - normal level (3 pts)
+
 include "globals.mzn";
 
 % Nombre de segments horizontaux et verticaux
@@ -19,7 +24,23 @@ int: m;
 array[1..h, 1..v] of var int: x;
 
 % Le coût total
-var int: tot_cost;
+var int: total_cost = 
+sum(i in 1..h, j in 1..v)(
+if x[i, j] !=0 then
+  % cout fixe
+  cost_per_permit[i, j] +
+  % cout variable
+  x[i, j] * cost_per_house[i, j]
+else 0 endif);
+
+% contrainte de construction minimale
+constraint forall(i in 1..h)( demand_per_h[i] <= sum(j in 1..v)(x[i, j]));
+constraint forall(j in 1..v)( demand_per_v[j] <= sum(i in 1..h)(x[i, j]));
+
+% contrainte du nombre maximal de maison par pater
+constraint forall(i in 1..h, j in 1..v)(x[i, j] <= m);
+
+solve minimize total_cost;
 
 output
   
@@ -39,6 +60,6 @@ output
   ++
   
   [
-  "Cost : " ++ show(tot_cost)
+  "Cost : " ++ show(total_cost)
   ]
   

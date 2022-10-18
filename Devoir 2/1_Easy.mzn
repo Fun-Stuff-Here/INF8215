@@ -1,3 +1,8 @@
+% Copyright (C) 2022, Elizabeth Michaud 2073093, Nicolas Dépelteau 2083544
+% Polytechnique Montréal
+%
+% Problème 1 - easy level (3 pts)
+
 include "globals.mzn";
 
 enum ATTRACTION;
@@ -19,9 +24,15 @@ array[ATTRACTION] of int: cost;
 var set of ATTRACTION: x;
 
 % Coût total
-var int: tot_cost;
+var int: total_cost = sum(i in x)(cost[i]);
+
+constraint l <= card(x) /\ card(x) <= u; % Vous devez sélectionner entre l et u attractions parmis un ensemble de A attractions qui vous est donné
+
+constraint m < sum(i in x, j in x) (pair_attraction[i, j]); % Vous devez sélectionner les attraits touristiques à construire afin d’avoir un attrait touristique total supérieur à m
+
+solve minimize total_cost;
 
 output [
   "Attractions : ", show(x), "\n",
-  "Cost : ", show(tot_cost)
+  "Cost : ", show(total_cost)
 ];

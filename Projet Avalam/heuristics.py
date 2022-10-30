@@ -69,3 +69,63 @@ def heuristic_isolation(state:AvalamState, player:int)->int:
         else:
             approximative_score += 1
     return approximative_score
+
+def heuristic_1(state: AvalamState, player: int)->float:
+
+    def get_all_moves_involving_tower(i: int, j: int):
+        tower_actions = state.get_tower_actions(i, j)
+        opposite_actions = []
+        for action in tower_actions:
+            opposite_action = (action[2], action[3], action[0], action[1])
+            # No need to validate action technically
+            opposite_actions.append(opposite_action)
+        return tower_actions + opposite_actions
+
+    def get_all_player_towers(state: AvalamState, player: int):
+        towers = state.get_towers()
+        player_towers = []
+        for tower in towers:
+            if tower[2] > 0 and player == 1:
+                player_towers.append(tower)
+            elif tower[2] < 0 and player == -1:
+                player_towers.append(tower)
+        return player_towers
+    
+    def is_player_tower_buried_by_action(state: AvalamState, player: int, action):
+        if state.m[action[2][3]] > 0 and player == 1:
+            return True
+        if state.m[action[2][3]] < 0 and player == -1:
+            return True
+    
+    TOWER_HEIGHT_INDEX = 2
+    SCORE_FOR_MAX_TOWER = 1
+    estimate_score = 0
+    for player_tower in get_all_player_towers(state, player):
+        if player_tower[TOWER_HEIGHT_INDEX] == player * state.max_height:
+            estimate_score += SCORE_FOR_MAX_TOWER
+        elif player * player_tower[TOWER_HEIGHT_INDEX] < 3 and state.is_tower_movable(player_tower[0], player_tower[1]):
+            estimate_score += 2
+        else:
+            nb_moves_burying_player_tower = 0
+            nb_moves_burying_opponent_tower = 0
+            for move in get_all_moves_involving_tower(player_tower[0], player_tower[1]):
+                #if player tower is buried
+
+                # Player 1
+                # -1 over -1 -> -1 TECHNICALLY NOT POSSIBLE
+                # -1 over 1 -> -1 true
+                # 1 over -1 -> 1 false
+                # 1 over 1 -> 1 true
+
+                # Player -1
+                # -1 over -1 -> -1 true
+                # -1 over 1 -> -1 false
+                # 1 over -1 -> 1 true
+                # 1 over 1 -> 1 TECHNICALLY NOT POSSIBLE
+                if is_player_tower_buried_by_action(state, player, move):
+                    nb_moves_burying_player_tower += 1
+                else: 
+                    nb_moves_burying_opponent_tower += 1
+                
+            estimate_score += 1 if nb_moves_burying_player_tower >= nb_moves_burying_opponent_tower else 1.5
+    return estimate_score

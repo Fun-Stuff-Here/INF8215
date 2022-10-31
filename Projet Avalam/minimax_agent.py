@@ -24,10 +24,10 @@ class AlphaBetaPruningAgent(Agent):
         """
         if step <= 10:
             self.cutoff_depth = 20
-        elif step <= 24:
+        elif step <= 22:
             self.cutoff_depth = 10
         elif step <= 34:
-            self.cutoff_depth = 7
+            self.cutoff_depth = 6
         else:
             self.cutoff_depth = 9
 

@@ -7,7 +7,7 @@ Polytechnique Montréal
 from numpy import inf, array, int64
 from numba import njit
 from njitavalam import Board as AvalamState, RED
-from heuristics import heuristic_1, heuristic_isolation
+from heuristics import heuristic_1, heuristic_2, heuristic_isolation
 
 def alpha_beta_pruning_search(percepts:dict, player:int, cutoff_depth:int):
     """
@@ -36,7 +36,7 @@ def max_value(state:AvalamState, player:int, alpha:int, beta:int, depth:int, cut
     if state.is_finished():
         return state.get_score(), None
     if depth > cutoff_depth and is_quiescent(player, state):
-        return heuristic_1(state, player), None
+        return heuristic_2(state, player), None
         #return heuristic(state, player), None
     depth += 1
     best_score = -inf
@@ -60,7 +60,7 @@ def min_value(state:AvalamState, player:int, alpha:int, beta:int, depth:int, cut
     if state.is_finished():
         return state.get_score(), None
     if depth > cutoff_depth:
-        return heuristic_1(state, player)
+        return heuristic_2(state, player)
         #return heuristic(state, player), None
     depth += 1
     best_score = inf

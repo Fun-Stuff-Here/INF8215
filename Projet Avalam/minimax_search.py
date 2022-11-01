@@ -8,7 +8,10 @@ from numpy import inf, array, int64, absolute
 from numba import njit
 from njitavalam import Board as AvalamState, RED
 from heuristics import heuristic_1, heuristic_2, heuristic_isolation
+from joblib import Memory
 
+memory = Memory("cachedir", verbose=1, bytes_limit=1e9)
+@memory.cache
 def alpha_beta_pruning_search(percepts:dict, player:int, cutoff_depth:int):
     """
     Alpha-Beta Pruning search

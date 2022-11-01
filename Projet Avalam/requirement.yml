@@ -9,3 +9,4 @@ dependencies:
     - numba==0.55.1
     - panda==0.3.1
     - numpy==1.21.5
+    - joblib==1.1.0

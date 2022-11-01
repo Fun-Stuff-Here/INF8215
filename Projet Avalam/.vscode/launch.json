@@ -59,6 +59,15 @@
             "args": ["--bind", "localhost", "--port", "8000"]
         },
         {
+            "name": "minimax agent on port 8020",
+            "type": "python",
+            "request": "launch",
+            "program": "minimax_agent.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8020"]
+        },
+        {
             "name": "game port 8000 et port 8010",
             "type": "python",
             "request": "launch",

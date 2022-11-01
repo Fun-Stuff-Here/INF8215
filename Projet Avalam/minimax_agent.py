@@ -22,10 +22,14 @@ class AlphaBetaPruningAgent(Agent):
         """
         Update cutoff depth
         """
-        if step <= 30:
-            self.cutoff_depth = 2
-        if step > 30:
-            self.cutoff_depth = 4
+        if step <= 10:
+            self.cutoff_depth = 20
+        elif step <= 22:
+            self.cutoff_depth = 10
+        elif step <= 34:
+            self.cutoff_depth = 6
+        else:
+            self.cutoff_depth = 9
 
     def play(self, percepts:dict, player:int, step:int, time_left:int):
         """
@@ -67,3 +71,4 @@ if __name__ == "__main__":
         agent_main(my_agent)
     except Exception as error:
         print(error)
+        print("Error in agent_main")

@@ -22,6 +22,8 @@ class AlphaBetaPruningAgent(Agent):
         """
         Update cutoff depth
         """
+        self.cutoff_depth = 2
+        return
         if step <= 10:
             self.cutoff_depth = 20
         elif step <= 22:

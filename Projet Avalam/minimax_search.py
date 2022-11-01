@@ -4,7 +4,7 @@ Copyright (C) 2022, Elizabeth Michaud 2073093, Nicolas Dépelteau 2083544
 Polytechnique Montréal
 """
 
-from numpy import inf, array, int64
+from numpy import inf, array, int64, absolute
 from numba import njit
 from njitavalam import Board as AvalamState, RED
 from heuristics import heuristic_1, heuristic_2, heuristic_isolation
@@ -36,8 +36,7 @@ def max_value(state:AvalamState, player:int, alpha:int, beta:int, depth:int, cut
     if state.is_finished():
         return state.get_score(), None
     if depth > cutoff_depth and is_quiescent(player, state):
-        return heuristic_2(state, player), None
-        #return heuristic(state, player), None
+        return heuristic(state, player), None
     depth += 1
     best_score = -inf
     best_move = None
@@ -59,9 +58,8 @@ def min_value(state:AvalamState, player:int, alpha:int, beta:int, depth:int, cut
     """
     if state.is_finished():
         return state.get_score(), None
-    if depth > cutoff_depth:
-        return heuristic_2(state, player)
-        #return heuristic(state, player), None
+    if depth > cutoff_depth and is_quiescent(player, state):
+        return heuristic(state, player), None
     depth += 1
     best_score = inf
     best_move = None
@@ -89,9 +87,41 @@ def alpha_beta_pruning_algo(state:AvalamState, player:int, cutoff_depth:int):
         return min_value(state, player, -inf, inf, 0, cutoff_depth)[1]
     return max_value(state, player, -inf, inf, 0, cutoff_depth)[1]
 
-def is_quiescent(player: int, state: AvalamState):
-    possible_actions = state.get_actions()
-    a = len(possible_actions)
-    if a < 40:
-        return False
+def is_quiescent(player: int, state: AvalamState) -> bool:
+    """
+    Check if the state is quiescent
+    """
+
+    x_from, y_from, i, j = state.last_action
+    h = state.m[i][j]
+    h_abs = absolute(h)
+    max_height = state.max_height
+
+    # if the last action can be capture for a tower of height 5 then it is not quiescent
+    # code smells but it is for performance reasons
+    if h_abs != max_height and h_abs != 2:
+        if i != 0 and j !=0:
+            if absolute(state.m[i-1, j-1]) + h_abs == max_height and state.m[i-1, j-1] + h != max_height:
+                return False
+        if i != 0:
+            if absolute(state.m[i-1, j]) + h_abs == max_height and state.m[i-1, j] + h != max_height:
+                return False
+        if i != 0 and j != 8:
+            if absolute(state.m[i-1, j+1]) + h_abs == max_height and state.m[i-1, j+1] + h != max_height:
+                return False
+        if j != 0:
+            if absolute(state.m[i, j-1]) + h_abs == max_height and state.m[i, j-1] + h != max_height:
+                return False
+        if j != 8:
+            if absolute(state.m[i, j+1]) + h_abs == max_height and state.m[i, j+1] + h != max_height:
+                return False
+        if i != 8 and j != 0:
+            if absolute(state.m[i+1, j-1]) + h_abs == max_height and state.m[i+1, j-1] + h != max_height:
+                return False
+        if i != 8:
+            if absolute(state.m[i+1, j]) + h_abs == max_height and state.m[i+1, j] + h != max_height:
+                return False
+        if i != 8 and j != 8:
+            if absolute(state.m[i+1, j+1]) + h_abs == max_height and state.m[i+1, j+1] + h != max_height:
+                return False
     return True

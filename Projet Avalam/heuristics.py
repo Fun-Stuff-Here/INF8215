@@ -6,10 +6,11 @@ Polytechnique Montréal
 
 from numba import njit
 from njitavalam import Board as AvalamState
+from minimax_optimization import IncrementalBoard, neighbor_cells_indexes
 from numpy import array, absolute
 
 
-def heuristic_isolation(state:AvalamState, player:int)->int:
+def heuristic_isolation(state:IncrementalBoard, player:int)->int:
     """
     Heuristic function
     :param state: the current state
@@ -19,12 +20,27 @@ def heuristic_isolation(state:AvalamState, player:int)->int:
 
     # If the game is not finished, return the number of isolated cells
     estimated_score = 0
-    for x, y, h in state.get_towers():
-        if not state.is_tower_movable(x, y):
+    max_height = state.max_height
+
+    for i, j in state.modified_neighborhood:
+        h = state.cell(i, j)
+        h_abs = abs(h)
+        if h_abs == 0:
+            continue
+        if h_abs == max_height:
             if h > 0:
                 estimated_score += 1
             else:
                 estimated_score -= 1
+        for x, y in neighbor_cells_indexes(i, j):
+            if abs(state.cell(x, y)) + h_abs <= max_height:
+                break
+        else:
+            if h > 0:
+                estimated_score += 1
+            else:
+                estimated_score -= 1
+
     return estimated_score
 
 def get_all_moves_involving_tower(i: int, j: int, state: AvalamState):

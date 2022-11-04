@@ -1,9 +1,9 @@
 """
   Avalam numba compatible
 """
-from numba.experimental import jitclass
-from numba.types import int64, optional, Tuple
-from numba.typed import List # pylint: disable=no-name-in-module
+# from numba.experimental import jitclass
+# from numba.types import int64, optional, Tuple
+# from numba.typed import List # pylint: disable=no-name-in-module
 import numpy as np
 
 # (negative for red, positive for yellow)
@@ -13,15 +13,17 @@ PLAYER2 = -1 # red
 YELLOW = PLAYER1
 RED = PLAYER2
 
-@jitclass([
-    ('max_height', int64),
-    ('initial_board', int64[:,:]),
-    ('m', int64[:,:]),
-    ('rows', int64),
-    ('columns', int64),
-    ('max_height', int64),
-    ('last_action', optional(Tuple([int64, int64, int64, int64]))),
-])
+# @jitclass([
+#     ('max_height', int64),
+#     ('initial_board', int64[:,:]),
+#     ('m', int64[:,:]),
+#     ('rows', int64),
+#     ('columns', int64),
+#     ('max_height', int64),
+#     ('last_action', optional(Tuple([int64, int64, int64, int64]))),
+# ])
+
+
 class Board:
 
     """Representation of an Avalam Board.
@@ -53,21 +55,10 @@ class Board:
 
         """
         # standard avalam
-        self.max_height = 5
-        self.initial_board =  np.array([ [ 0,  0,  1, -1,  0,  0,  0,  0,  0],
-                                [ 0,  1, -1,  1, -1,  0,  0,  0,  0],
-                                [ 0, -1,  1, -1,  1, -1,  1,  0,  0],
-                                [ 0,  1, -1,  1, -1,  1, -1,  1, -1],
-                                [ 1, -1,  1, -1,  0, -1,  1, -1,  1],
-                                [-1,  1, -1,  1, -1,  1, -1,  1,  0],
-                                [ 0,  0,  1, -1,  1, -1,  1, -1,  0],
-                                [ 0,  0,  0,  0, -1,  1, -1,  1,  0],
-                                [ 0,  0,  0,  0,  0, -1,  1,  0,  0] ])
         self.m = percepts # pylint: disable=invalid-name
-        self.rows = len(self.m)
-        self.columns = len(self.m[0])
-        self.max_height = max_height
-        self.m = self.get_percepts(invert)  # make a copy of the percepts
+        self.rows = 9
+        self.columns = 9
+        self.max_height = 5
         self.last_action = None
 
     def __str__(self) -> str:
@@ -117,20 +108,23 @@ class Board:
     def get_tower_actions(self, i, j):
         """Yield all actions with moving tower (i,j)"""
         h = abs(self.m[i][j]) # pylint: disable=invalid-name
-        if h > 0 and h < self.max_height:
-            for di in (-1, 0, 1): # pylint: disable=invalid-name
-                for dj in (-1, 0, 1): # pylint: disable=invalid-name
-                    action = (i, j, i+di, j+dj)
-                    if self.is_action_valid(action):
-                        yield action
+        if 0 < h < self.max_height:
+            i_min = max(0, i-1)
+            j_min = max(0, j-1)
+            i_max = min(8, i+1)
+            j_max = min(8, j+1)
+            for di in range(i_min, i_max+1):
+                for dj in range(j_min, j_max+1):
+                    if h < abs(self.m[di][dj]) + h <= self.max_height:
+                        if di == i and dj == j:
+                            continue
+                        yield (i, j, di, dj)
 
     def get_actions(self) -> list[tuple[int, int, int, int]]:
         """Yield all valid actions on this board."""
-        actions = List()
         for i, j, _ in self.get_towers():
             for action in self.get_tower_actions(i, j):
-                actions.append(action)
-        return actions
+                yield action
 
     def play_action(self, action):
         """Play an action if it is valid.

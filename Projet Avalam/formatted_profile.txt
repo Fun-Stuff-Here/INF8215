@@ -1,0 +1,58 @@
+Wed Nov  2 18:58:07 2022    profile_results
+
+         35590347 function calls (35463385 primitive calls) in 69.264 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000   69.264   69.264 {built-in method builtins.exec}
+        1    0.000    0.000   69.264   69.264 <string>:1(<module>)
+        1    0.000    0.000   69.264   69.264 minimax_agent.py:34(play)
+        1    0.000    0.000   69.263   69.263 /workspace/minimax_search.py:18(alpha_beta_pruning_search)
+        1    0.000    0.000   69.263   69.263 /workspace/minimax_search.py:86(alpha_beta_pruning_algo)
+  47427/1    0.887    0.000   69.261   69.261 /workspace/minimax_search.py:38(max_value)
+ 79556/21    0.819    0.000   69.249    3.298 /workspace/minimax_search.py:62(min_value)
+   143931   22.057    0.000   39.136    0.000 /workspace/minimax_search.py:116(get_actions)
+  1211159    3.595    0.000   18.103    0.000 /workspace/minimax_optimization.py:154(get_actions)
+   110034    0.214    0.000   16.104    0.000 /workspace/minimax_search.py:29(heuristic)
+   110034   10.852    0.000   15.890    0.000 /workspace/heuristics.py:13(heuristic_isolation)
+  2661015    9.430    0.000   14.508    0.000 /workspace/minimax_optimization.py:163(is_action_still_valid)
+ 20337534   13.629    0.000   13.629    0.000 /workspace/minimax_optimization.py:65(cell)
+   126983    0.436    0.000    7.120    0.000 /workspace/minimax_optimization.py:197(is_finished)
+   126982    1.823    0.000    2.946    0.000 /workspace/minimax_optimization.py:76(append)
+  7755109    2.238    0.000    2.238    0.000 {built-in method builtins.abs}
+   121472    0.985    0.000    1.407    0.000 /workspace/minimax_search.py:99(is_quiescent)
+   126982    0.703    0.000    0.795    0.000 /workspace/minimax_optimization.py:106(pop)
+   253943    0.463    0.000    0.463    0.000 {method 'union' of 'set' objects}
+  1120220    0.432    0.000    0.432    0.000 {method 'random' of '_random.Random' objects}
+   242944    0.254    0.000    0.336    0.000 /workspace/minimax_optimization.py:134(last_action)
+   253964    0.092    0.000    0.092    0.000 {method 'pop' of 'list' objects}
+   254304    0.084    0.000    0.084    0.000 {method 'append' of 'list' objects}
+   242944    0.082    0.000    0.082    0.000 {built-in method builtins.len}
+   110034    0.075    0.000    0.075    0.000 /workspace/minimax_optimization.py:124(modified_neighborhood)
+   126982    0.064    0.000    0.064    0.000 {method 'remove' of 'set' objects}
+    13202    0.026    0.000    0.026    0.000 {built-in method builtins.min}
+    12508    0.020    0.000    0.020    0.000 {built-in method builtins.max}
+        1    0.000    0.000    0.002    0.002 /workspace/minimax_optimization.py:47(__init__)
+      293    0.000    0.000    0.002    0.000 /workspace/njitavalam.py:123(get_actions)
+       48    0.001    0.000    0.001    0.000 /workspace/minimax_optimization.py:23(neighbor_cells_indexes)
+      340    0.001    0.000    0.001    0.000 /workspace/njitavalam.py:108(get_tower_actions)
+    28/27    0.000    0.000    0.001    0.000 /home/vscode/.vscode-server/extensions/ms-python.python-2022.16.1/pythonFiles/lib/python/debugpy/_vendored/pydevd/pydevd.py:975(get_file_type)
+       26    0.000    0.000    0.000    0.000 /home/vscode/.vscode-server/extensions/ms-python.python-2022.16.1/pythonFiles/lib/python/debugpy/_vendored/pydevd/pydevd.py:929(_internal_get_file_type)
+       26    0.000    0.000    0.000    0.000 /home/vscode/.vscode-server/extensions/ms-python.python-2022.16.1/pythonFiles/lib/python/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_api.py:908(custom_dont_trace_external_files)
+       98    0.000    0.000    0.000    0.000 /workspace/njitavalam.py:94(get_towers)
+        1    0.000    0.000    0.000    0.000 /workspace/minimax_optimization.py:54(<listcomp>)
+        1    0.000    0.000    0.000    0.000 /workspace/njitavalam.py:187(is_action_valid)
+        2    0.000    0.000    0.000    0.000 {built-in method numpy.array}
+      104    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
+       26    0.000    0.000    0.000    0.000 /home/vscode/.vscode-server/extensions/ms-python.python-2022.16.1/pythonFiles/lib/python/debugpy/_vendored/pydevd/pydevd_file_utils.py:293(normcase)
+       26    0.000    0.000    0.000    0.000 {method 'endswith' of 'str' objects}
+       26    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
+       27    0.000    0.000    0.000    0.000 /home/vscode/.vscode-server/extensions/ms-python.python-2022.16.1/pythonFiles/lib/python/debugpy/_vendored/pydevd/pydevd.py:1050(get_cache_file_type)
+        2    0.000    0.000    0.000    0.000 /workspace/njitavalam.py:37(__init__)
+        1    0.000    0.000    0.000    0.000 /home/vscode/.vscode-server/extensions/ms-python.python-2022.16.1/pythonFiles/lib/python/debugpy/_vendored/pydevd/pydevd_file_utils.py:375(basename)
+        1    0.000    0.000    0.000    0.000 /home/vscode/.vscode-server/extensions/ms-python.python-2022.16.1/pythonFiles/lib/python/debugpy/_vendored/pydevd/pydevd_file_utils.py:828(get_abs_path_real_path_and_base_from_file)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        1    0.000    0.000    0.000    0.000 minimax_agent.py:22(update_cutoff_depth)
+
+

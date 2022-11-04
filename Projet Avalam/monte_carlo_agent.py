@@ -22,6 +22,7 @@ from avalam import Agent, agent_main
 from njitavalam import Board, PLAYER1
 from random_actions import random_action
 from monte_carlo_tree_search import monte_carlo_tree_search
+import traceback
 
 class MyAgent(Agent):
 
@@ -46,7 +47,7 @@ class MyAgent(Agent):
                 return action
             raise Exception("Invalid action")
         except Exception as error:  # pylint: disable=broad-except
-            print(error)
+            traceback.print_exc()
             return random_action(board_copy)
 
 if __name__ == "__main__":

@@ -9,6 +9,7 @@ from minimax_search import alpha_beta_pruning_search
 from random_actions import random_action
 from avalam import Agent, agent_main
 from njitavalam import PLAYER1, Board
+import traceback
 
 class AlphaBetaPruningAgent(Agent):
     """
@@ -16,22 +17,19 @@ class AlphaBetaPruningAgent(Agent):
     """
 
     def __init__(self):
-        self.cutoff_depth = 2
+        self.cutoff_depth = 1
 
     def update_cutoff_depth(self, step:int):
         """
         Update cutoff depth
         """
-        self.cutoff_depth = 2
         return
         if step <= 10:
-            self.cutoff_depth = 20
+            self.cutoff_depth = 4
         elif step <= 22:
-            self.cutoff_depth = 10
-        elif step <= 34:
             self.cutoff_depth = 6
-        else:
-            self.cutoff_depth = 9
+        elif step <= 34:
+            self.cutoff_depth = 8
 
     def play(self, percepts:dict, player:int, step:int, time_left:int):
         """
@@ -53,7 +51,7 @@ class AlphaBetaPruningAgent(Agent):
                 return action
             raise Exception("Invalid action")
         except Exception as error:  # pylint: disable=broad-except
-            print(error)
+            traceback.print_exc()
             return random_action(board_copy)
 
 if __name__ == "__main__":
@@ -68,7 +66,15 @@ if __name__ == "__main__":
                                 [ 0,  0,  0,  0, -1,  1, -1,  1,  0],
                                 [ 0,  0,  0,  0,  0, -1,  1,  0,  0] ]
                 , "max_height": 5 }
-    my_agent.play(percepts=percepts, player=PLAYER1, step=1, time_left=900)
+    
+    # import cProfile
+    # cProfile.run('my_agent.play(percepts=percepts, player=PLAYER1, step=1, time_left=900)', 'profile_results')
+    # import pstats
+    # file = open('formatted_profile.txt', 'w')
+    # profile = pstats.Stats('profile_results', stream=file)
+    # profile.sort_stats('cumulative') # Sorts the result according to the supplied criteria
+    # profile.print_stats() # Prints the first 15 lines of the sorted report
+    # file.close()
     try:
         agent_main(my_agent)
     except Exception as error:

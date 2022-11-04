@@ -18,17 +18,17 @@ from minimax_search import alpha_beta_pruning_algo
 from quick_action import quick_action
 from random_actions import random_action
 
-node_type = deferred_type()
+# node_type = deferred_type()
 
-@jitclass([
-    ('state', AvalamState.class_type.instance_type), # pylint: disable=no-member
-    ('parent', optional(node_type)),
-    ('child', optional(node_type)),
-    ('next', optional(node_type)),
-    ('utility', int64),
-    ('n_simulations', int64),
-    ('player', int64),
-])
+# @jitclass([
+#     ('state', AvalamState.class_type.instance_type), # pylint: disable=no-member
+#     ('parent', optional(node_type)),
+#     ('child', optional(node_type)),
+#     ('next', optional(node_type)),
+#     ('utility', int64),
+#     ('n_simulations', int64),
+#     ('player', int64),
+# ])
 class MCTS_Node: # pylint: disable=invalid-name
     """
     Noeud de monte carlo tree search
@@ -59,7 +59,7 @@ class MCTS_Node: # pylint: disable=invalid-name
         expand the node by adding all possible children
         """
         if self.child is None:
-            actions = self.state.get_actions()
+            actions = list(self.state.get_actions())
             if len(actions) > 0:
                 next_state = self.state.clone().play_action(actions[0])
                 sibling = MCTS_Node(next_state, self, self.player * -1)
@@ -136,7 +136,7 @@ class MCTS_Node: # pylint: disable=invalid-name
         """
         policy used for the rollout
         """
-        return random_action(state)
+        return alpha_beta_pruning_algo(state, player, 1)
 
     def rollout(self, step:int):
         """
@@ -152,7 +152,7 @@ class MCTS_Node: # pylint: disable=invalid-name
             current_step += 1
         return current_rollout_state.get_score()
 
-node_type.define(MCTS_Node.class_type.instance_type) # pylint: disable=no-member
+# node_type.define(MCTS_Node.class_type.instance_type) # pylint: disable=no-member
 
 if __name__ == "__main__":
     state1 = AvalamState()

@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "random player on port 8000",
+            "name": "Random player on port 8000",
             "type": "python",
             "request": "launch",
             "program": "random_player.py",
@@ -14,7 +14,16 @@
             "args": ["--bind", "localhost", "--port", "8000"]
         },
         {
-            "name": "greedy player on port 8010",
+            "name": "Random player on port 8020",
+            "type": "python",
+            "request": "launch",
+            "program": "random_player.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8020"]
+        },
+        {
+            "name": "Greedy player on port 8010",
             "type": "python",
             "request": "launch",
             "program": "greedy_player.py",
@@ -23,7 +32,16 @@
             "args": ["--bind", "localhost", "--port", "8010"]
         },
         {
-            "name": "my player on port 8020",
+            "name": "Greedy player on port 8020",
+            "type": "python",
+            "request": "launch",
+            "program": "greedy_player.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8020"]
+        },
+        {
+            "name": "My player on port 8020",
             "type": "python",
             "request": "launch",
             "program": "my_player.py",
@@ -32,13 +50,22 @@
             "args": ["--bind", "localhost", "--port", "8020"]
         },
         {
-            "name": "minimax agent on port 8010",
+            "name": "Minimax agent on port 8010",
             "type": "python",
             "request": "launch",
             "program": "minimax_agent.py",
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": ["--bind", "localhost", "--port", "8010"]
+        },
+        {
+            "name": "Minimax agent on port 8020",
+            "type": "python",
+            "request": "launch",
+            "program": "minimax_agent.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8020"]
         },
         {
             "name": "Monte Carlo player on port 8020",
@@ -75,15 +102,6 @@
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": ["--bind", "localhost", "--port", "8010"]
-        },
-        {
-            "name": "minimax agent on port 8020",
-            "type": "python",
-            "request": "launch",
-            "program": "minimax_agent.py",
-            "console": "integratedTerminal",
-            "justMyCode": true,
-            "args": ["--bind", "localhost", "--port", "8020"]
         },
         {
             "name": "game port 8000 et port 8010",

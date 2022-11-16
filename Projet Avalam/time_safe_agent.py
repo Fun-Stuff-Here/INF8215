@@ -44,7 +44,7 @@ class TimeSafeAgent(Agent):
             return random_action(board_copy)
 
     @abc.abstractmethod
-    def get_action(self, percepts, player, step, time_left):
+    def get_action(self, board:Board, player:int, step:int, time_left:int)->tuple[int,int,int,int]:
         """
         Get an action
         :param percepts: dictionary representing the current board

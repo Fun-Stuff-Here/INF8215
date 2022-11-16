@@ -1,6 +1,9 @@
 """
-  Avalam using numpy
+  Avalam numba compatible
 """
+from numba.experimental import jitclass
+from numba.types import int64, optional, Tuple
+from numba.typed import List # pylint: disable=no-name-in-module
 import numpy as np
 
 # (negative for red, positive for yellow)
@@ -10,6 +13,15 @@ PLAYER2 = -1 # red
 YELLOW = PLAYER1
 RED = PLAYER2
 
+@jitclass([
+    ('max_height', int64),
+    ('initial_board', int64[:,:]),
+    ('m', int64[:,:]),
+    ('rows', int64),
+    ('columns', int64),
+    ('max_height', int64),
+    ('last_action', optional(Tuple([int64, int64, int64, int64]))),
+])
 class Board:
 
     """Representation of an Avalam Board.
@@ -114,7 +126,7 @@ class Board:
 
     def get_actions(self) -> list[tuple[int, int, int, int]]:
         """Yield all valid actions on this board."""
-        actions = list()
+        actions = List()
         for i, j, _ in self.get_towers():
             for action in self.get_tower_actions(i, j):
                 actions.append(action)

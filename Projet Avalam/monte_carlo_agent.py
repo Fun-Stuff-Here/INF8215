@@ -17,40 +17,31 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 Recherche d'arbre de Monte Carlo
 """
-from numpy import array, int64
-from avalam import Agent, agent_main
+
+from avalam import agent_main
 from njitavalam import Board, PLAYER1
 from random_actions import random_action
 from monte_carlo_tree_search import monte_carlo_tree_search
+from time_safe_agent import TimeSafeAgent
 
-class MyAgent(Agent):
+class MonteCarloAgent(TimeSafeAgent):
+    """
+     Agent based on monte carlo tree search
+    """
 
-    """My Avalam agent."""
-
-    def play(self, percepts, player, step, time_left):
+    def get_action(self, board:Board, player:int, step:int, time_left:int)->tuple[int,int,int,int]:
         """
-        Play a move
+        Get an action
         :param percepts: dictionary representing the current board
         :param player: the player to control in this step (-1 or 1)
         :param step: the current step
         :param time_left: the time left for the agent to play
         :return: the action to play
         """
-        board_array = array(percepts['m'], dtype=int64)
-        board_copy = Board(board_array, percepts['max_height'])
-        try:
-            if time_left < 2.0:
-                raise Exception("not enough time left")
-            action = monte_carlo_tree_search(Board(board_array, percepts['max_height']), player, step, time_left)
-            if board_copy.is_action_valid(action):
-                return action
-            raise Exception("Invalid action")
-        except Exception as error:  # pylint: disable=broad-except
-            print(error)
-            return random_action(board_copy)
+        return monte_carlo_tree_search(board, player, step, time_left)
 
 if __name__ == "__main__":
-    my_agent = MyAgent()
+    my_agent = MonteCarloAgent()
     percepts = { "m":[ [ 0,  0,  1, -1,  0,  0,  0,  0,  0],
                                 [ 0,  1, -1,  1, -1,  0,  0,  0,  0],
                                 [ 0, -1,  1, -1,  1, -1,  1,  0,  0],

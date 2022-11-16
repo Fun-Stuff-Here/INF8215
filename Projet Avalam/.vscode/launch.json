@@ -50,6 +50,15 @@
             "args": ["--bind", "localhost", "--port", "8020"]
         },
         {
+            "name": "Monte Carlo RAVE player on port 8020",
+            "type": "python",
+            "request": "launch",
+            "program": "mc_rave_agent.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8020"]
+        },
+        {
             "name": "Basic player on port 8000",
             "type": "python",
             "request": "launch",

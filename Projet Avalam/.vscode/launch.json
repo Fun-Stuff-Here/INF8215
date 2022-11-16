@@ -59,6 +59,15 @@
             "args": ["--bind", "localhost", "--port", "8000"]
         },
         {
+            "name": "Logic agent on port 8010",
+            "type": "python",
+            "request": "launch",
+            "program": "logic_agent.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8010"]
+        },
+        {
             "name": "minimax agent on port 8020",
             "type": "python",
             "request": "launch",

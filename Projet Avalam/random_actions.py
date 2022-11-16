@@ -24,3 +24,10 @@ def random_action(board: Board):
     actions = board.get_actions()
     return choose_random_actions(actions)
 
+def random_actions_alarm_handler(board: Board):
+    """
+    Handler for the alarm signal
+    """
+    def handler(_, __):
+        return random_action(board)
+    return handler

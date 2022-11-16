@@ -21,7 +21,7 @@ def alpha_beta_pruning_search(percepts:dict, player:int, cutoff_depth:int):
     :return: the best move
     """
     board_array = array(percepts['m'], dtype=int64)
-    return alpha_beta_pruning_algo(AvalamState(board_array, percepts['max_height']), player, cutoff_depth)
+    return alpha_beta_pruning_algo(AvalamState(board_array, percepts['max_height']), player, cutoff_depth, step)
 
 def heuristic(state:AvalamState, player:int):
     """
@@ -32,7 +32,7 @@ def heuristic(state:AvalamState, player:int):
     """
     return heuristic_isolation(state, player)
 
-def max_value(state:AvalamState, player:int, alpha:int, beta:int, depth:int, cutoff_depth:int):
+def max_value(state:AvalamState, player:int, alpha:int, beta:int, depth:int, cutoff_depth:int, step:int):
     """
     Max value function for alpha beta pruning yellow percpective
     """
@@ -46,7 +46,7 @@ def max_value(state:AvalamState, player:int, alpha:int, beta:int, depth:int, cut
 
     for action in state.get_actions():
         new_state = state.clone().play_action(action)
-        score, _ = min_value(new_state, player, alpha, beta, depth, cutoff_depth)
+        score, _ = min_value(new_state, player, alpha, beta, depth, cutoff_depth, step + 1)
         if score > best_score:
             best_score = score
             best_move = action
@@ -55,7 +55,7 @@ def max_value(state:AvalamState, player:int, alpha:int, beta:int, depth:int, cut
             return best_score, best_move
     return best_score, best_move
 
-def min_value(state:AvalamState, player:int, alpha:int, beta:int, depth:int, cutoff_depth:int):
+def min_value(state:AvalamState, player:int, alpha:int, beta:int, depth:int, cutoff_depth:int, step:int):
     """
     Min value function for alpha beta pruning red percepctive
     """
@@ -69,7 +69,7 @@ def min_value(state:AvalamState, player:int, alpha:int, beta:int, depth:int, cut
 
     for action in state.get_actions():
         new_state = state.clone().play_action(action)
-        score, _ = max_value(new_state, player, alpha, beta, depth, cutoff_depth)
+        score, _ = max_value(new_state, player, alpha, beta, depth, cutoff_depth, step + 1)
         if score < best_score:
             best_score = score
             best_move = action
@@ -78,7 +78,7 @@ def min_value(state:AvalamState, player:int, alpha:int, beta:int, depth:int, cut
             return best_score, best_move
     return best_score, best_move
 
-def alpha_beta_pruning_algo(state:AvalamState, player:int, cutoff_depth:int):
+def alpha_beta_pruning_algo(state:AvalamState, player:int, cutoff_depth:int, step:int):
     """
     Alpha-Beta Pruning search
     :param state: avalam board
@@ -87,8 +87,8 @@ def alpha_beta_pruning_algo(state:AvalamState, player:int, cutoff_depth:int):
     :return: the best move
     """
     if player == RED:
-        return min_value(state, player, -inf, inf, 0, cutoff_depth)[1]
-    return max_value(state, player, -inf, inf, 0, cutoff_depth)[1]
+        return min_value(state, player, -inf, inf, 0, cutoff_depth, step)[1]
+    return max_value(state, player, -inf, inf, 0, cutoff_depth, step)[1]
 
 def is_quiescent(player: int, state: AvalamState) -> bool:
     """

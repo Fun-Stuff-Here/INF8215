@@ -22,16 +22,16 @@ class AlphaBetaPruningAgent(Agent):
         """
         Update cutoff depth
         """
-        self.cutoff_depth = 2
-        return
-        if step <= 10:
-            self.cutoff_depth = 20
-        elif step <= 22:
-            self.cutoff_depth = 10
-        elif step <= 34:
-            self.cutoff_depth = 6
+        if step <= 8:
+            self.cutoff_depth = 1
+        elif step <= 20:
+            self.cutoff_depth = 2
+        elif step <= 30:
+            self.cutoff_depth = 3
+        elif step <= 36:
+            self.cutoff_depth = 4
         else:
-            self.cutoff_depth = 9
+            self.cutoff_depth = 5
 
     def play(self, percepts:dict, player:int, step:int, time_left:int):
         """
@@ -42,13 +42,14 @@ class AlphaBetaPruningAgent(Agent):
         :param time_left: the time left for the agent to play
         :return: the action to play
         """
+        print("step : ", step, "\n Time left : ", time_left)
         board_array = array(percepts['m'], dtype=int64)
         board_copy = Board(board_array, percepts['max_height'])
         try:
             if time_left < 2.0:
                 raise Exception("not enough time left")
             self.update_cutoff_depth(step)
-            action = alpha_beta_pruning_search(percepts, player, self.cutoff_depth)
+            action = alpha_beta_pruning_search(percepts, player, self.cutoff_depth, step)
             if board_copy.is_action_valid(action):
                 return action
             raise Exception("Invalid action")

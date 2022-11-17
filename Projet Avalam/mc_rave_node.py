@@ -9,7 +9,7 @@ https://stackoverflow.com/questions/60189128/n-ary-trees-in-numba
 https://www.geeksforgeeks.org/left-child-right-sibling-representation-tree/
 https://en.wikipedia.org/wiki/Left-child_right-sibling_binary_tree
 """
-from numba import int64, deferred_type, optional
+from numba import int64, deferred_type, optional, objmode
 from numba.types import Tuple, DictType
 from numba.experimental import jitclass
 from numba.typed import Dict, List
@@ -17,6 +17,8 @@ from numpy import sqrt, inf, log
 from avalam import Board
 from njitavalam import YELLOW, RED, Board as AvalamState
 from random_actions import random_action
+from greedy_alog import greedy_action
+from heuristics import heuristic_isolation
 
 node_type = deferred_type()
 action_type = Tuple([int64, int64, int64, int64])
@@ -161,7 +163,18 @@ class MCTS_Rave_Node: # pylint: disable=invalid-name
         """
         policy used for the rollout
         """
-        return random_action(state)
+        actions = state.get_actions()
+        best_action = actions[0]
+        best_value = -30
+        for action in actions:
+            next_state = state.clone().play_action(action)
+            isolation_value = heuristic_isolation(next_state, player)
+            value = player * isolation_value
+            if value > best_value:
+                best_value = value
+                best_action = action
+
+        return best_action
 
     def rollout(self, step:int):
         """
@@ -171,12 +184,18 @@ class MCTS_Rave_Node: # pylint: disable=invalid-name
         current_player = self.player
         current_step = step
         actions = List()
-        while not current_rollout_state.is_finished():
+        score = 0
+        for _ in range(6):
+            if current_rollout_state.is_finished():
+                score = current_rollout_state.get_score()
+                break
             action = self.rollout_policy(current_rollout_state, current_player, current_step)
             actions.append(action)
             current_rollout_state = current_rollout_state.play_action(action)
             current_player = current_player * -1
             current_step += 1
+        else:
+            score = heuristic_isolation(current_rollout_state, self.player)
         # update action_dict
         score = current_rollout_state.get_score()
         for action in actions:

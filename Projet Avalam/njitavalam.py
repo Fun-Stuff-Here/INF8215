@@ -117,12 +117,17 @@ class Board:
     def get_tower_actions(self, i, j):
         """Yield all actions with moving tower (i,j)"""
         h = abs(self.m[i][j]) # pylint: disable=invalid-name
-        if h > 0 and h < self.max_height:
-            for di in (-1, 0, 1): # pylint: disable=invalid-name
-                for dj in (-1, 0, 1): # pylint: disable=invalid-name
-                    action = (i, j, i+di, j+dj)
-                    if self.is_action_valid(action):
-                        yield action
+        if 0 < h < self.max_height:
+            i_min = max(0, i-1)
+            j_min = max(0, j-1)
+            i_max = min(8, i+1)
+            j_max = min(8, j+1)
+            for di in range(i_min, i_max+1):
+                for dj in range(j_min, j_max+1):
+                    if h < abs(self.m[di][dj]) + h <= self.max_height:
+                        if di == i and dj == j:
+                            continue
+                        yield (i, j, di, dj)
 
     def get_actions(self) -> list[tuple[int, int, int, int]]:
         """Yield all valid actions on this board."""

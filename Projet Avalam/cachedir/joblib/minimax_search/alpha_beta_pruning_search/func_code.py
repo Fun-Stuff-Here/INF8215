@@ -9,4 +9,4 @@ def alpha_beta_pruning_search(percepts:dict, player:int, cutoff_depth:int):
     :return: the best move
     """
     board_array = array(percepts['m'], dtype=int64)
-    return alpha_beta_pruning_algo(AvalamState(board_array, percepts['max_height']), player, cutoff_depth)
+    return alpha_beta_pruning_algo(AvalamState(board_array, percepts['max_height']), player, cutoff_depth, step)

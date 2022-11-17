@@ -12,6 +12,7 @@ from numpy import array, absolute
 def basic_heuristic(state: AvalamState):
     return state.get_score()
 
+@njit()
 def heuristic_isolation(state:AvalamState, player:int)->int:
     """
     Heuristic function
@@ -22,13 +23,36 @@ def heuristic_isolation(state:AvalamState, player:int)->int:
 
     # If the game is not finished, return the number of isolated cells
     estimated_score = 0
-    for x, y, h in state.get_towers():
-        if not state.is_tower_movable(x, y):
-            if h > 0:
-                estimated_score += 1
-            else:
-                estimated_score -= 1
-    return estimated_score
+    score = 0
+    n_towers = 0
+    for x in range(9):
+        for y in range(9):
+            if state.m[x][y]:
+                h = state.m[x][y]
+                n_towers += 1
+                if h > 0:
+                    score = 1
+                else:
+                    score -= 1
+                i_min = max(0, x-1)
+                i_max = min(8, x+1)
+                j_min = max(0, y-1)
+                j_max = min(8, y+1)
+                is_not_isolated = False
+                h_abs = abs(h)
+                for i in range(i_min, i_max+1):
+                    for j in range(j_min, j_max+1):
+                        if (5-abs(state.m[i][j])) <= h_abs and h_abs!=5:
+                            is_not_isolated = True
+                            break
+                    if is_not_isolated:
+                        break
+                if not is_not_isolated:
+                    if h > 0:
+                        estimated_score += 1
+                    else:
+                        estimated_score -= 1
+    return estimated_score + score/n_towers
 
 def get_all_moves_involving_tower(i: int, j: int, state: AvalamState):
     actions = []

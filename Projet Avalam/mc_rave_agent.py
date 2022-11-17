@@ -26,6 +26,14 @@ class MonteCarloRaveAgent(TimeSafeAgent):
         :param time_left: the time left for the agent to play
         :return: the action to play
         """
+
+        for action in board.get_actions():
+            x_from, y_from, x_to, y_to = action
+            if abs(board.m[x_to][y_to]) + abs(board.m[x_from][y_from]) == 5:
+                if board.m[x_from][y_from] * player > 0:
+                    if board.m[x_to][y_to] * -player > 0:
+                        return action
+
         return monte_carlo_tree_search(board, player, step, time_left)
 
 if __name__ == "__main__":

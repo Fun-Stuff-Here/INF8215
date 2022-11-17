@@ -113,15 +113,9 @@ def heuristic_1(state: AvalamState, player: int)->float:
                     nb_moves_burying_opponent_tower += 1
                
             estimated_score += 0.8 if nb_moves_burying_player_tower >= nb_moves_burying_opponent_tower else 1.4
-    return estimated_score
+    return player * estimated_score
 
-def heuristic_2(state: AvalamState, player: int)->float:
-    player_estimated_score = heuristic_1(state, player)
-    opponent_estimated_score = heuristic_1(state, -1 * player)
-    real_score = state.get_score()
-    return real_score + player * 2 if player_estimated_score > opponent_estimated_score else real_score
-
-def heuristic_3(state: AvalamState, player: int, step: int)->float:
+def heuristic_2(state: AvalamState, player: int, step: int)->float:
     TOWER_HEIGHT_INDEX = 2
     SCORE_FOR_MAX_TOWER = 1.2
     estimated_score = 0
@@ -167,5 +161,5 @@ def heuristic_3(state: AvalamState, player: int, step: int)->float:
             diff = nb_moves_burying_opponent_tower - nb_moves_burying_player_tower
             estimated_score += 1 + diff / 10
                 
-    return estimated_score
+    return player * estimated_score
     

@@ -1,6 +1,6 @@
 # first line: 14
 @memory.cache
-def alpha_beta_pruning_search(percepts:dict, player:int, cutoff_depth:int):
+def alpha_beta_pruning_search(percepts:dict, player:int, cutoff_depth:int, step: int):
     """
     Alpha-Beta Pruning search
     :param percepts: dictionary representing the current board

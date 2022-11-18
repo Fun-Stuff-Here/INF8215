@@ -54,6 +54,7 @@ def heuristic_isolation(state:AvalamState, player:int)->int:
                         estimated_score -= 1
     return estimated_score + score/n_towers
 
+@njit()
 def get_all_moves_involving_tower(i: int, j: int, state: AvalamState):
     actions = []
     for action in state.get_tower_actions(i, j):
@@ -63,6 +64,7 @@ def get_all_moves_involving_tower(i: int, j: int, state: AvalamState):
         actions.append(opposite_action)
     return actions
 
+@njit()
 def get_all_player_towers(state: AvalamState, player: int):
     towers = state.get_towers()
     player_towers = []
@@ -73,6 +75,7 @@ def get_all_player_towers(state: AvalamState, player: int):
             player_towers.append(tower)
     return player_towers
 
+@njit()
 def is_player_tower_buried_by_action(state: AvalamState, player: int, action):
     buried_tower = state.m[action[2]][action[3]]
     if buried_tower > 0 and player == 1:
@@ -115,6 +118,7 @@ def heuristic_1(state: AvalamState, player: int)->float:
             estimated_score += 0.8 if nb_moves_burying_player_tower >= nb_moves_burying_opponent_tower else 1.4
     return player * estimated_score
 
+@njit()
 def heuristic_2(state: AvalamState, player: int, step: int)->float:
     TOWER_HEIGHT_INDEX = 2
     SCORE_FOR_MAX_TOWER = 1.2

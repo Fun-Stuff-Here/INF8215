@@ -18,7 +18,7 @@ from avalam import Board
 from njitavalam import YELLOW, RED, Board as AvalamState
 from random_actions import random_action
 from greedy_alog import greedy_action
-from heuristics import heuristic_isolation
+from heuristics import heuristic_isolation, heuristic_1, heuristic_2
 
 #node_type = deferred_type()
 action_type = Tuple([int64, int64, int64, int64])
@@ -168,7 +168,7 @@ class MCTS_Rave_Node: # pylint: disable=invalid-name
         best_value = -30
         for action in actions:
             next_state = state.clone().play_action(action)
-            isolation_value = heuristic_isolation(next_state, player)
+            isolation_value = heuristic_2(next_state, player, step)
             value = player * isolation_value
             if value > best_value:
                 best_value = value
@@ -185,7 +185,7 @@ class MCTS_Rave_Node: # pylint: disable=invalid-name
         current_step = step
         actions = List()
         score = 0
-        for _ in range(6):
+        for _ in range(4):
             if current_rollout_state.is_finished():
                 score = current_rollout_state.get_score()
                 break

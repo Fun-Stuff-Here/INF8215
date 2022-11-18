@@ -3,7 +3,7 @@
 """
 from numba.experimental import jitclass
 from numba.types import int64, optional, Tuple
-from numba.typed import List # pylint: disable=no-name-in-module
+#from numba.typed import List # pylint: disable=no-name-in-module
 import numpy as np
 
 # (negative for red, positive for yellow)
@@ -131,7 +131,7 @@ class Board:
 
     def get_actions(self) -> list[tuple[int, int, int, int]]:
         """Yield all valid actions on this board."""
-        actions = List()
+        actions = []
         for i, j, _ in self.get_towers():
             for action in self.get_tower_actions(i, j):
                 actions.append(action)

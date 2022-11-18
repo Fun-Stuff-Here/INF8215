@@ -6,31 +6,31 @@ Recherche d'arbre de Monte Carlo
 https://www.analyticsvidhya.com/blog/2019/01/monte-carlo-tree-search-introduction-algorithm-deepmind-alphago/
 """
 
-from time import time as python_time
+from time import time #as python_time
 from numba import njit, cfunc, objmode, int64
 from numba.types import boolean, float64, Tuple
 from numba.typed import Dict
 from numpy import abs as np_abs, inf
 from mc_rave_node import MCTS_Rave_Node as Node, action_type, dict_item_type
 
-@njit()
-def time():
-    """
-    Returns the time in seconds
-    """
-    with objmode(current_time=float64):
-        current_time = python_time()
-    return current_time
+# @njit()
+# def time():
+#     """
+#     Returns the time in seconds
+#     """
+#     with objmode(current_time=float64):
+#         current_time = python_time()
+#     return current_time
 
-@cfunc(boolean(float64, float64, int64))
+#@cfunc(boolean(float64, float64, int64))
 def time_condition(start_time:float, current_time:float, n_similation:int):
     """
     This function is used to stop the monte carlo tree search
     Returns true if the time is up
     """
-    return np_abs(current_time - start_time) > 15.0 and n_similation > 10_000
+    return np_abs(current_time - start_time) > 15.0 and n_similation > 2_000
 
-@njit()
+#@njit()
 def monte_carlo_tree_search(board, player:int, step:int, time_left:int):
     """
     Returns best action from monte-carlo tree search
@@ -39,7 +39,7 @@ def monte_carlo_tree_search(board, player:int, step:int, time_left:int):
     root = Node(board, None, player, (0, 0, 0, 0), d)
     return monte_carlo_algo(root, player, time_condition, step)
 
-@njit()
+#@njit()
 def tree_policy(node:Node, player:int):
     """
     select the node the maximize the UCB score
@@ -58,7 +58,7 @@ def tree_policy(node:Node, player:int):
 
     return best_child_found
 
-@njit()
+#@njit()
 def best_action(root: Node, player:int, step:int):
     """
     returns the best action to take
@@ -71,7 +71,7 @@ def best_action(root: Node, player:int, step:int):
         return root.rollout_policy(root.state, player, step)
     return best_child.state.last_action
 
-@njit()
+#@njit()
 def monte_carlo_algo(root:Node, player: int, stop_condition, step:int):
     """
     Hold the algorithm of monte-carlo tree search

@@ -20,22 +20,22 @@ from random_actions import random_action
 from greedy_alog import greedy_action
 from heuristics import heuristic_isolation
 
-node_type = deferred_type()
+#node_type = deferred_type()
 action_type = Tuple([int64, int64, int64, int64])
 dict_item_type = Tuple([int64, int64])
 dict_type = DictType(action_type, dict_item_type)
 
-@jitclass([
-    ('state', AvalamState.class_type.instance_type), # pylint: disable=no-member
-    ('parent', optional(node_type)),
-    ('child', optional(node_type)),
-    ('next', optional(node_type)),
-    ('utility', int64),
-    ('n_simulations', int64),
-    ('player', int64),
-    ('action_dict', dict_type),
-    ('action', action_type)
-])
+# @jitclass([
+#     ('state', AvalamState.class_type.instance_type), # pylint: disable=no-member
+#     ('parent', optional(node_type)),
+#     ('child', optional(node_type)),
+#     ('next', optional(node_type)),
+#     ('utility', int64),
+#     ('n_simulations', int64),
+#     ('player', int64),
+#     ('action_dict', dict_type),
+#     ('action', action_type)
+# ])
 class MCTS_Rave_Node: # pylint: disable=invalid-name
     """
     Noeud de monte carlo tree search
@@ -206,7 +206,7 @@ class MCTS_Rave_Node: # pylint: disable=invalid-name
                 self.action_dict[action] = (1, score)
         return score
 
-node_type.define(MCTS_Rave_Node.class_type.instance_type) # pylint: disable=no-member
+#node_type.define(MCTS_Rave_Node.class_type.instance_type) # pylint: disable=no-member
 
 if __name__ == "__main__":
     state1 = AvalamState()

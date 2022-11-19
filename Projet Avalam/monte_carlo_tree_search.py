@@ -6,38 +6,51 @@ Recherche d'arbre de Monte Carlo
 https://www.analyticsvidhya.com/blog/2019/01/monte-carlo-tree-search-introduction-algorithm-deepmind-alphago/
 """
 
-from time import time #as python_time
-from numba import njit, cfunc, objmode
-from numba.types import boolean, float64
-from numpy import abs as np_abs, inf
+from time import time
+from numpy import abs as np_abs, inf, floor
 from monte_carlo_tree_node import MCTS_Node as Node
 
-#@njit()
-# def time():
-#     """
-#     Returns the time in seconds
-#     """
-#     with objmode(current_time=float64):
-#         current_time = python_time()
-#     return current_time
+TURN_REPARTITION = {
+    1: 5,
+    2: 35,
+    3: 120,
+    4: 100,
+    5: 100,
+    6: 100,
+    7: 100,
+    8: 75,
+    9: 75,
+    10: 60,
+    11: 30,
+    12: 30,
+    13: 30,
+    14: 15,
+    15: 10,
+    16: 5,
+    17: 3,
+    18: 3,
+    19: 2,
+    20: 2
+}
 
-#@cfunc(boolean(float64, float64))
-def time_condition(start_time:float, current_time:float):
+def time_condition(start_time:float, current_time:float, time_left:int):
     """
     This function is used to stop the monte carlo tree search
     Returns true if the time is up
     """
-    return np_abs(current_time - start_time) > 6.0 #seconds
+    return np_abs(current_time - start_time) > (time_left - 1) #seconds
 
-#@njit()
 def monte_carlo_tree_search(board, player:int, step:int, time_left:int):
     """
     Returns best action from monte-carlo tree search
     """
-    root = Node(board, None, player)
-    return monte_carlo_algo(root, player, time_condition, step)
+    turnNumber = floor(step/2) + step%2
+    if turnNumber in TURN_REPARTITION:
+        time_left = TURN_REPARTITION[turnNumber]
 
-#@njit()
+    root = Node(board, None, player)
+    return monte_carlo_algo(root, player, time_condition, step, time_left)
+
 def tree_policy(node:Node, player:int):
     """
     select the node the maximize the UCB score
@@ -46,7 +59,7 @@ def tree_policy(node:Node, player:int):
     best_child_found:Node = None
     upper_confidence_bound = -inf
     for child in children:
-        uct: float64 = child.UCT(player)
+        uct = child.UCT(player)
         if uct > upper_confidence_bound:
             upper_confidence_bound = uct
             best_child_found = child
@@ -56,28 +69,24 @@ def tree_policy(node:Node, player:int):
 
     return best_child_found
 
-#@njit()
 def best_action(root: Node, player:int, step:int):
     """
     returns the best action to take
     """
-
-    print("n_simulations", root.n_simulations)
 
     best_child:Node = root.best_child()
     if best_child is None:
         return root.rollout_policy(root.state, player, step)
     return best_child.state.last_action
 
-#@njit()
-def monte_carlo_algo(root:Node, player: int, stop_condition, step:int):
+def monte_carlo_algo(root:Node, player: int, stop_condition, step:int, time_left:int):
     """
     Hold the algorithm of monte-carlo tree search
     """
     start_time = time()
     root.expand()
 
-    while not stop_condition(start_time, time()):
+    while not stop_condition(start_time, time(), time_left):
         current_node = root
         while not current_node.is_leaf:
             current_node = tree_policy(current_node, player)

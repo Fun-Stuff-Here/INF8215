@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Avalam agent.
 Copyright (C) 2022, Elizabeth Michaud 2073093, Nicolas Dépelteau 2083544
@@ -16,38 +15,48 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, see <http://www.gnu.org/licenses/>.
 
+Recherche d'arbre de Monte Carlo
 """
-from avalam import *
 
+from gc import collect
+from avalam import agent_main
+from njitavalam import Board, PLAYER1
+from monte_carlo_tree_search import monte_carlo_tree_search
+from time_safe_agent import TimeSafeAgent
 
-class MyAgent(Agent):
+class MonteCarloAgent(TimeSafeAgent):
+    """
+     Agent based on monte carlo tree search
+    """
 
-    """My Avalam agent."""
-
-    def play(self, percepts, player, step, time_left):
+    def get_action(self, board:Board, player:int, step:int, time_left:int)->tuple[int,int,int,int]:
         """
-        This function is used to play a move according
-        to the percepts, player and time left provided as input.
-        It must return an action representing the move the player
-        will perform.
+        Get an action
         :param percepts: dictionary representing the current board
-            in a form that can be fed to `dict_to_board()` in avalam.py.
         :param player: the player to control in this step (-1 or 1)
-        :param step: the current step number, starting from 1
-        :param time_left: a float giving the number of seconds left from the time
-            credit. If the game is not time-limited, time_left is None.
-        :return: an action
-            eg; (1, 4, 1 , 3) to move tower on cell (1,4) to cell (1,3)
+        :param step: the current step
+        :param time_left: the time left for the agent to play
+        :return: the action to play
         """
-        print("percept:", percepts)
-        print("player:", player)
-        print("step:", step)
-        print("time left:", time_left if time_left else '+inf')
-
-        # TODO: implement your agent and return an action for the current step.
-        pass
-
+        action = monte_carlo_tree_search(board, player, step, time_left)
+        collect()
+        return action
 
 if __name__ == "__main__":
-    agent_main(MyAgent())
-
+    my_agent = MonteCarloAgent()
+    percepts = { "m":[ [ 0,  0,  1, -1,  0,  0,  0,  0,  0],
+                                [ 0,  1, -1,  1, -1,  0,  0,  0,  0],
+                                [ 0, -1,  1, -1,  1, -1,  1,  0,  0],
+                                [ 0,  1, -1,  1, -1,  1, -1,  1, -1],
+                                [ 1, -1,  1, -1,  0, -1,  1, -1,  1],
+                                [-1,  1, -1,  1, -1,  1, -1,  1,  0],
+                                [ 0,  0,  1, -1,  1, -1,  1, -1,  0],
+                                [ 0,  0,  0,  0, -1,  1, -1,  1,  0],
+                                [ 0,  0,  0,  0,  0, -1,  1,  0,  0] ]
+                , "max_height": 5 }
+    my_agent.play(percepts=percepts, player=PLAYER1, step=1, time_left=900)
+    try:
+        agent_main(my_agent)
+    except Exception as error: # pylint: disable=broad-except
+        print(error)
+        print("Error in agent_main")

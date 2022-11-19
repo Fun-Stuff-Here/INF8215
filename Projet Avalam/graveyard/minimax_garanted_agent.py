@@ -5,8 +5,8 @@ Polytechnique Montréal
 """
 
 from numpy import array, int64
-from minimax_search import alpha_beta_pruning_search
-from random_actions import random_action
+from graveyard.minimax_garanted_search import alpha_beta_pruning_search
+from graveyard.random_actions import random_action
 from avalam import Agent, agent_main
 from njitavalam import PLAYER1, Board
 

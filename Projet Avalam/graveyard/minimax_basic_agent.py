@@ -1,23 +1,39 @@
 """
-Avalam agent.
+Avalam agent using minimax.
 Copyright (C) 2022, Elizabeth Michaud 2073093, Nicolas Dépelteau 2083544
 Polytechnique Montréal
-
-Uilisation d'une base de connaissance pour l'agent logique
 """
 
-from signal import signal, alarm, SIGALRM
 from numpy import array, int64
+from graveyard.minimax_basic_search import alpha_beta_pruning_search
+from graveyard.random_actions import random_action
 from avalam import Agent, agent_main
-from njitavalam import Board, PLAYER1
-from random_actions import random_action, random_actions_alarm_handler
-from logic import get_action
+from njitavalam import PLAYER1, Board
 
-class LogicAgent(Agent):
+class AlphaBetaPruningAgent(Agent):
+    """
+     Alpha-Beta Pruning agent
+    """
 
-    """My Avalam agent."""
+    def __init__(self):
+        self.cutoff_depth = 2
 
-    def play(self, percepts, player, step, time_left):
+    def update_cutoff_depth(self, step:int):
+        """
+        Update cutoff depth
+        """
+        if step <= 8:
+            self.cutoff_depth = 1
+        elif step <= 20:
+            self.cutoff_depth = 2
+        elif step <= 30:
+            self.cutoff_depth = 3
+        elif step <= 36:
+            self.cutoff_depth = 4
+        else:
+            self.cutoff_depth = 5
+
+    def play(self, percepts:dict, player:int, step:int, time_left:int):
         """
         Play a move
         :param percepts: dictionary representing the current board
@@ -26,24 +42,23 @@ class LogicAgent(Agent):
         :param time_left: the time left for the agent to play
         :return: the action to play
         """
+        print("step : ", step, "\n Time left : ", time_left)
         board_array = array(percepts['m'], dtype=int64)
         board_copy = Board(board_array, percepts['max_height'])
         try:
             if time_left < 2.0:
                 raise Exception("not enough time left")
-            signal(SIGALRM, random_actions_alarm_handler(board_copy))
-            alarm(int(time_left - 2.0)) # set an alarm for 2 seconds before the time limit
-            action = get_action(percepts, player, step, time_left)
-            alarm(0) # cancel alarm
+            self.update_cutoff_depth(step)
+            action = alpha_beta_pruning_search(percepts, player, self.cutoff_depth, step)
             if board_copy.is_action_valid(action):
                 return action
             raise Exception("Invalid action")
-        except Exception as err:  # pylint: disable=broad-except
-            print(err)
+        except Exception as error:  # pylint: disable=broad-except
+            print(error)
             return random_action(board_copy)
 
 if __name__ == "__main__":
-    my_agent = LogicAgent()
+    my_agent = AlphaBetaPruningAgent()
     percepts = { "m":[ [ 0,  0,  1, -1,  0,  0,  0,  0,  0],
                                 [ 0,  1, -1,  1, -1,  0,  0,  0,  0],
                                 [ 0, -1,  1, -1,  1, -1,  1,  0,  0],

@@ -1,7 +1,7 @@
 from numpy import inf, array, int64, absolute
 from numba import njit
 from njitavalam import Board as AvalamState, RED
-from heuristics import heuristic_2
+from graveyard.heuristics import heuristic_2
 from joblib import Memory
 
 memory = Memory("cachedir", verbose=1, bytes_limit=1e9)

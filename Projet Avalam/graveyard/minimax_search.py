@@ -7,7 +7,7 @@ Polytechnique Montréal
 from numpy import inf, array, int64, absolute
 from numba import njit
 from njitavalam import Board as AvalamState, RED
-from heuristics import basic_heuristic, heuristic_1, heuristic_2, heuristic_isolation
+from graveyard.heuristics import basic_heuristic, heuristic_1, heuristic_2, heuristic_isolation
 from joblib import Memory
 
 memory = Memory("cachedir", verbose=1, bytes_limit=1e9)

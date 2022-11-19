@@ -1,6 +1,7 @@
 """
 Random actions for the agent
 """
+from random import choice
 from numpy.random import uniform
 from numba import njit
 from numba.types import int64
@@ -29,5 +30,5 @@ def random_actions_alarm_handler(board: Board):
     Handler for the alarm signal
     """
     def handler(_, __):
-        return random_action(board)
+        return choice(board.get_actions())
     return handler

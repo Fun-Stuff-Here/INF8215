@@ -16,9 +16,9 @@ from numba.typed import Dict, List
 from numpy import sqrt, inf, log
 from avalam import Board
 from njitavalam import YELLOW, RED, Board as AvalamState
-from random_actions import random_action
-from greedy_alog import greedy_action
-from heuristics import heuristic_isolation, heuristic_1, heuristic_2
+from graveyard.random_actions import random_action
+from graveyard.greedy_alog import greedy_action
+from graveyard.heuristics import heuristic_isolation, heuristic_1, heuristic_2
 
 #node_type = deferred_type()
 action_type = Tuple([int64, int64, int64, int64])

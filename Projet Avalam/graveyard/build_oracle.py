@@ -1,7 +1,7 @@
 import pickle
 import numpy as np
 from njitavalam import Board as AvalamState
-from random_actions import choose_random_actions
+from graveyard.random_actions import choose_random_actions
 
 def save_object(obj, filename):
     with open(filename, 'wb') as outp:  # Overwrites any existing file.

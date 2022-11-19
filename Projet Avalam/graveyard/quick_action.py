@@ -9,7 +9,7 @@ from numba import njit
 from numba.typed import List # pylint: disable=no-name-in-module
 from numpy import absolute as np_absolute
 from njitavalam import Board as AvalamState
-from random_actions import choose_random_actions
+from graveyard.random_actions import choose_random_actions
 
 @njit()
 def is_tower_isolated(state:AvalamState, action:tuple[int,int,int,int]) -> bool:

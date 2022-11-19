@@ -11,7 +11,7 @@ from numba import njit, cfunc, objmode, int64
 from numba.types import boolean, float64, Tuple
 from numba.typed import Dict
 from numpy import abs as np_abs, inf
-from mc_rave_node import MCTS_Rave_Node as Node, action_type, dict_item_type
+from graveyard.mc_rave_node import MCTS_Rave_Node as Node, action_type, dict_item_type
 
 # @njit()
 # def time():

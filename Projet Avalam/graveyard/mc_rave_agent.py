@@ -8,8 +8,8 @@ Recherche d'arbre de Monte Carlo avec RAVE
 
 from avalam import agent_main
 from njitavalam import Board, PLAYER1
-from random_actions import random_action
-from mc_rave_algo import monte_carlo_tree_search
+from graveyard.random_actions import random_action
+from graveyard.mc_rave_algo import monte_carlo_tree_search
 from time_safe_agent import TimeSafeAgent
 
 class MonteCarloRaveAgent(TimeSafeAgent):

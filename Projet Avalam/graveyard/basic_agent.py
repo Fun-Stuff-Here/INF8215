@@ -1,39 +1,33 @@
+#!/usr/bin/env python3
 """
-Avalam agent using minimax.
+Avalam agent.
 Copyright (C) 2022, Elizabeth Michaud 2073093, Nicolas Dépelteau 2083544
 Polytechnique Montréal
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; version 2 of the License.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, see <http://www.gnu.org/licenses/>.
+
 """
-
 from numpy import array, int64
-from minimax_garanted_search import alpha_beta_pruning_search
-from random_actions import random_action
 from avalam import Agent, agent_main
-from njitavalam import PLAYER1, Board
+from njitavalam import Board, PLAYER1
+from graveyard.random_actions import random_action
+from graveyard.quick_action import quick_action
 
-class AlphaBetaPruningAgent(Agent):
-    """
-     Alpha-Beta Pruning agent
-    """
+class BasicAgent(Agent):
 
-    def __init__(self):
-        self.cutoff_depth = 2
+    """My Avalam agent."""
 
-    def update_cutoff_depth(self, step:int):
-        """
-        Update cutoff depth
-        """
-        if step <= 8:
-            self.cutoff_depth = 1
-        elif step <= 20:
-            self.cutoff_depth = 2
-        elif step <= 30:
-            self.cutoff_depth = 3
-        elif step <= 36:
-            self.cutoff_depth = 4
-        else:
-            self.cutoff_depth = 5
-
-    def play(self, percepts:dict, player:int, step:int, time_left:int):
+    def play(self, percepts, player, step, time_left):
         """
         Play a move
         :param percepts: dictionary representing the current board
@@ -42,14 +36,12 @@ class AlphaBetaPruningAgent(Agent):
         :param time_left: the time left for the agent to play
         :return: the action to play
         """
-        print("step : ", step, "\n Time left : ", time_left)
         board_array = array(percepts['m'], dtype=int64)
         board_copy = Board(board_array, percepts['max_height'])
         try:
             if time_left < 2.0:
                 raise Exception("not enough time left")
-            self.update_cutoff_depth(step)
-            action = alpha_beta_pruning_search(percepts, player, self.cutoff_depth, step)
+            action = quick_action(Board(board_array, percepts['max_height']), player)
             if board_copy.is_action_valid(action):
                 return action
             raise Exception("Invalid action")
@@ -58,7 +50,7 @@ class AlphaBetaPruningAgent(Agent):
             return random_action(board_copy)
 
 if __name__ == "__main__":
-    my_agent = AlphaBetaPruningAgent()
+    my_agent = BasicAgent()
     percepts = { "m":[ [ 0,  0,  1, -1,  0,  0,  0,  0,  0],
                                 [ 0,  1, -1,  1, -1,  0,  0,  0,  0],
                                 [ 0, -1,  1, -1,  1, -1,  1,  0,  0],

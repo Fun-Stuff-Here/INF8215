@@ -10,7 +10,7 @@ from signal import signal, alarm, SIGALRM, getsignal
 from numpy import array, int64
 from avalam import Agent
 from njitavalam import Board
-from random_actions import random_action, random_actions_alarm_handler
+from graveyard.random_actions import random_action, random_actions_alarm_handler
 
 class TimeSafeAgent(Agent):
     """

@@ -1,7 +1,7 @@
 from numpy import inf, array, int64, absolute
 from numba import njit
 from njitavalam import Board as AvalamState, RED
-from heuristics import basic_heuristic
+from graveyard.heuristics import heuristic_isolation
 from joblib import Memory
 
 memory = Memory("cachedir", verbose=1, bytes_limit=1e9)
@@ -24,7 +24,7 @@ def heuristic(state:AvalamState, player:int, step: int):
     :param player: the player to control in this step (-1 or 1)
     :return: the heuristic value
     """
-    return basic_heuristic(state)
+    return heuristic_isolation(state, player)
 
 def max_value(state:AvalamState, player:int, alpha:int, beta:int, depth:int, cutoff_depth:int, step:int):
     """

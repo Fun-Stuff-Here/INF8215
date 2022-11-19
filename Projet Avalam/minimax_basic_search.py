@@ -1,13 +1,7 @@
-"""
-Minimax with alpha beta pruning.
-Copyright (C) 2022, Elizabeth Michaud 2073093, Nicolas Dépelteau 2083544
-Polytechnique Montréal
-"""
-
 from numpy import inf, array, int64, absolute
 from numba import njit
 from njitavalam import Board as AvalamState, RED
-from heuristics import basic_heuristic, heuristic_1, heuristic_2, heuristic_isolation
+from heuristics import basic_heuristic
 from joblib import Memory
 
 memory = Memory("cachedir", verbose=1, bytes_limit=1e9)
@@ -30,7 +24,7 @@ def heuristic(state:AvalamState, player:int, step: int):
     :param player: the player to control in this step (-1 or 1)
     :return: the heuristic value
     """
-    return heuristic_1(state, player)
+    return basic_heuristic(state)
 
 def max_value(state:AvalamState, player:int, alpha:int, beta:int, depth:int, cutoff_depth:int, step:int):
     """
@@ -95,38 +89,3 @@ def is_quiescent(player: int, state: AvalamState) -> bool:
     Check if the state is quiescent
     """
     return len(state.get_actions()) > 10
-    """
-    x_from, y_from, i, j = state.last_action
-    h = state.m[i][j]
-    h_abs = absolute(h)
-    max_height = state.max_height
-
-    # if the last action can be capture for a tower of height 5 then it is not quiescent
-    # code smells but it is for performance reasons
-    if h_abs != max_height and h_abs != 2:
-        if i != 0 and j !=0:
-            if absolute(state.m[i-1, j-1]) + h_abs == max_height and state.m[i-1, j-1] + h != max_height:
-                return False
-        if i != 0:
-            if absolute(state.m[i-1, j]) + h_abs == max_height and state.m[i-1, j] + h != max_height:
-                return False
-        if i != 0 and j != 8:
-            if absolute(state.m[i-1, j+1]) + h_abs == max_height and state.m[i-1, j+1] + h != max_height:
-                return False
-        if j != 0:
-            if absolute(state.m[i, j-1]) + h_abs == max_height and state.m[i, j-1] + h != max_height:
-                return False
-        if j != 8:
-            if absolute(state.m[i, j+1]) + h_abs == max_height and state.m[i, j+1] + h != max_height:
-                return False
-        if i != 8 and j != 0:
-            if absolute(state.m[i+1, j-1]) + h_abs == max_height and state.m[i+1, j-1] + h != max_height:
-                return False
-        if i != 8:
-            if absolute(state.m[i+1, j]) + h_abs == max_height and state.m[i+1, j] + h != max_height:
-                return False
-        if i != 8 and j != 8:
-            if absolute(state.m[i+1, j+1]) + h_abs == max_height and state.m[i+1, j+1] + h != max_height:
-                return False
-    return True
-    """

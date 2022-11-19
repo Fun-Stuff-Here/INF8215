@@ -50,7 +50,43 @@
             "args": ["--bind", "localhost", "--port", "8020"]
         },
         {
-            "name": "Minimax agent on port 8010",
+            "name": "Minimax Basic agent on port 8010",
+            "type": "python",
+            "request": "launch",
+            "program": "minimax_basic_agent.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8010"]
+        },
+        {
+            "name": "Minimax Basic agent on port 8020",
+            "type": "python",
+            "request": "launch",
+            "program": "minimax_basic_agent.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8020"]
+        },
+        {
+            "name": "Minimax Garanted agent on port 8010",
+            "type": "python",
+            "request": "launch",
+            "program": "minimax_garanted_agent.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8010"]
+        },
+        {
+            "name": "Minimax Garanted agent on port 8020",
+            "type": "python",
+            "request": "launch",
+            "program": "minimax_garanted_agent.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8020"]
+        },
+        {
+            "name": "Minimax Heuristic1 agent on port 8010",
             "type": "python",
             "request": "launch",
             "program": "minimax_agent.py",
@@ -59,13 +95,40 @@
             "args": ["--bind", "localhost", "--port", "8010"]
         },
         {
-            "name": "Minimax agent on port 8020",
+            "name": "Minimax Heuristic1 agent on port 8020",
             "type": "python",
             "request": "launch",
             "program": "minimax_agent.py",
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": ["--bind", "localhost", "--port", "8020"]
+        },
+        {
+            "name": "Minimax Heuristic2 agent on port 8010",
+            "type": "python",
+            "request": "launch",
+            "program": "minimax_heuristic2_agent.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8010"]
+        },
+        {
+            "name": "Minimax Heuristic2 agent on port 8020",
+            "type": "python",
+            "request": "launch",
+            "program": "minimax_heuristic2_agent.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8020"]
+        },
+        {
+            "name": "Monte Carlo player on port 8000",
+            "type": "python",
+            "request": "launch",
+            "program": "monte_carlo_agent.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8000"]
         },
         {
             "name": "Monte Carlo player on port 8020",

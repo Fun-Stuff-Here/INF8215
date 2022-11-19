@@ -1,9 +1,9 @@
 """
   Avalam numba compatible
 """
+
 from numba.experimental import jitclass
 from numba.types import int64, optional, Tuple
-#from numba.typed import List # pylint: disable=no-name-in-module
 import numpy as np
 
 # (negative for red, positive for yellow)

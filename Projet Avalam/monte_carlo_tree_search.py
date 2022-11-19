@@ -38,15 +38,15 @@ def time_condition(start_time:float, current_time:float, time_left:int):
     This function is used to stop the monte carlo tree search
     Returns true if the time is up
     """
-    return np_abs(current_time - start_time) > (time_left - 1) #seconds
+    return np_abs(current_time - start_time) > (time_left - 1)
 
 def monte_carlo_tree_search(board, player:int, step:int, time_left:int):
     """
     Returns best action from monte-carlo tree search
     """
-    turnNumber = floor(step/2) + step%2
-    if turnNumber in TURN_REPARTITION:
-        time_left = TURN_REPARTITION[turnNumber]
+    turn_number = floor(step/2) + step%2
+    if turn_number in TURN_REPARTITION:
+        time_left = TURN_REPARTITION[turn_number]
 
     root = Node(board, None, player)
     return monte_carlo_algo(root, player, time_condition, step, time_left)

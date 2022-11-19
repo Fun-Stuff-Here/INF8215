@@ -9,27 +9,12 @@ https://stackoverflow.com/questions/60189128/n-ary-trees-in-numba
 https://www.geeksforgeeks.org/left-child-right-sibling-representation-tree/
 https://en.wikipedia.org/wiki/Left-child_right-sibling_binary_tree
 """
-from numba import int64, deferred_type, optional
-from numba.experimental import jitclass
+
+from random import choice
 from numpy import sqrt, inf, log
 from avalam import Board
-from random import choice
 from njitavalam import YELLOW, RED, Board as AvalamState
-from minimax_search import alpha_beta_pruning_algo
-from quick_action import quick_action
-from random_actions import random_action
 
-# node_type = deferred_type()
-
-# @jitclass([
-#     ('state', AvalamState.class_type.instance_type), # pylint: disable=no-member
-#     ('parent', optional(node_type)),
-#     ('child', optional(node_type)),
-#     ('next', optional(node_type)),
-#     ('utility', int64),
-#     ('n_simulations', int64),
-#     ('player', int64),
-# ])
 class MCTS_Node: # pylint: disable=invalid-name
     """
     Noeud de monte carlo tree search
@@ -133,7 +118,7 @@ class MCTS_Node: # pylint: disable=invalid-name
 
         return best_child_found
 
-    def rollout_policy(self, state:AvalamState, player:int, step:int):
+    def rollout_policy(self, state:AvalamState):
         """
         policy used for the rollout
         """
@@ -147,13 +132,11 @@ class MCTS_Node: # pylint: disable=invalid-name
         current_player = self.player
         current_step = step
         while not current_rollout_state.is_finished():
-            action = self.rollout_policy(current_rollout_state, current_player, current_step)
+            action = self.rollout_policy(current_rollout_state)
             current_rollout_state = current_rollout_state.play_action(action)
             current_player = current_player * -1
             current_step += 1
         return current_rollout_state.get_score()
-
-# node_type.define(MCTS_Node.class_type.instance_type) # pylint: disable=no-member
 
 if __name__ == "__main__":
     state1 = AvalamState()

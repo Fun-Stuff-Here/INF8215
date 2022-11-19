@@ -18,12 +18,11 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 Recherche d'arbre de Monte Carlo
 """
 
+from gc import collect
 from avalam import agent_main
 from njitavalam import Board, PLAYER1
-from random_actions import random_action
 from monte_carlo_tree_search import monte_carlo_tree_search
 from time_safe_agent import TimeSafeAgent
-from gc import collect
 
 class MonteCarloAgent(TimeSafeAgent):
     """
@@ -58,6 +57,6 @@ if __name__ == "__main__":
     my_agent.play(percepts=percepts, player=PLAYER1, step=1, time_left=900)
     try:
         agent_main(my_agent)
-    except Exception as error:
+    except Exception as error: # pylint: disable=broad-except
         print(error)
         print("Error in agent_main")

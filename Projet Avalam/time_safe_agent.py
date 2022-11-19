@@ -6,7 +6,7 @@ Polytechnique Montréal
 """
 
 import abc
-from signal import signal, alarm, SIGALRM
+from signal import signal, alarm, SIGALRM, getsignal
 from numpy import array, int64
 from avalam import Agent
 from njitavalam import Board
@@ -32,9 +32,11 @@ class TimeSafeAgent(Agent):
         try:
             if time_left < 2.0:
                 raise Exception("not enough time left")
+            original_handler = getsignal(SIGALRM)
             signal(SIGALRM, random_actions_alarm_handler(board_copy))
             alarm(int(time_left - 2.0)) # set an alarm for 2 seconds before the time limit
             action = self.get_action(Board(board_array, percepts['max_height']), player, step, time_left)
+            signal(SIGALRM, original_handler)
             alarm(0) # cancel alarm
             if board_copy.is_action_valid(action):
                 return action

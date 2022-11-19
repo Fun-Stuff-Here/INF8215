@@ -22,14 +22,14 @@ from gc import collect
 from avalam import agent_main
 from njitavalam import Board, PLAYER1
 from monte_carlo_tree_search import monte_carlo_tree_search
-from time_safe_agent import TimeSafeAgent
+from time_safe_alarm import TimeSafeAgent
 
 class MonteCarloAgent(TimeSafeAgent):
     """
      Agent based on monte carlo tree search
     """
 
-    def get_action(self, board:Board, player:int, step:int, time_left:int)->tuple[int,int,int,int]:
+    def get_action(self, board:Board, player:int, step:int, time_left:int):
         """
         Get an action
         :param percepts: dictionary representing the current board

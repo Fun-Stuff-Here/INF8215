@@ -10,7 +10,7 @@ from avalam import agent_main
 from njitavalam import Board, PLAYER1
 from graveyard.random_actions import random_action
 from graveyard.mc_rave_algo import monte_carlo_tree_search
-from time_safe_agent import TimeSafeAgent
+from time_safe_alarm import TimeSafeAgent
 
 class MonteCarloRaveAgent(TimeSafeAgent):
     """

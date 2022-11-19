@@ -129,7 +129,7 @@ class Board:
                             continue
                         yield (i, j, di, dj)
 
-    def get_actions(self) -> list[tuple[int, int, int, int]]:
+    def get_actions(self):
         """Yield all valid actions on this board."""
         actions = []
         for i, j, _ in self.get_towers():

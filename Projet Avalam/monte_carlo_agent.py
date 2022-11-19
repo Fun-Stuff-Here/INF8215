@@ -23,6 +23,7 @@ from njitavalam import Board, PLAYER1
 from random_actions import random_action
 from monte_carlo_tree_search import monte_carlo_tree_search
 from time_safe_agent import TimeSafeAgent
+from gc import collect
 
 class MonteCarloAgent(TimeSafeAgent):
     """
@@ -38,7 +39,9 @@ class MonteCarloAgent(TimeSafeAgent):
         :param time_left: the time left for the agent to play
         :return: the action to play
         """
-        return monte_carlo_tree_search(board, player, step, time_left)
+        action = monte_carlo_tree_search(board, player, step, time_left)
+        collect()
+        return action
 
 if __name__ == "__main__":
     my_agent = MonteCarloAgent()

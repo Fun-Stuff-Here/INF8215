@@ -163,18 +163,19 @@ class MCTS_Rave_Node: # pylint: disable=invalid-name
         """
         policy used for the rollout
         """
-        actions = state.get_actions()
-        best_action = actions[0]
-        best_value = -30
-        for action in actions:
-            next_state = state.clone().play_action(action)
-            isolation_value = heuristic_2(next_state, player, step)
-            value = player * isolation_value
-            if value > best_value:
-                best_value = value
-                best_action = action
+        return random_action(state)
+        # actions = state.get_actions()
+        # best_action = actions[0]
+        # best_value = -30
+        # for action in actions:
+        #     next_state = state.clone().play_action(action)
+        #     isolation_value = heuristic_isolation(next_state, player)
+        #     value = player * isolation_value
+        #     if value > best_value:
+        #         best_value = value
+        #         best_action = action
 
-        return best_action
+        # return best_action
 
     def rollout(self, step:int):
         """
@@ -185,7 +186,7 @@ class MCTS_Rave_Node: # pylint: disable=invalid-name
         current_step = step
         actions = List()
         score = 0
-        for _ in range(4):
+        for _ in range(6):
             if current_rollout_state.is_finished():
                 score = current_rollout_state.get_score()
                 break

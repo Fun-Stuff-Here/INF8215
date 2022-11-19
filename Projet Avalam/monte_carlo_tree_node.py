@@ -13,6 +13,7 @@ from numba import int64, deferred_type, optional
 from numba.experimental import jitclass
 from numpy import sqrt, inf, log
 from avalam import Board
+from random import choice
 from njitavalam import YELLOW, RED, Board as AvalamState
 from minimax_search import alpha_beta_pruning_algo
 from quick_action import quick_action
@@ -136,7 +137,7 @@ class MCTS_Node: # pylint: disable=invalid-name
         """
         policy used for the rollout
         """
-        return random_action(state)
+        return choice(state.get_actions())
 
     def rollout(self, step:int):
         """

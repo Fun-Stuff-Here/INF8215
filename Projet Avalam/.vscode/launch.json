@@ -86,6 +86,15 @@
             "args": ["--bind", "localhost", "--port", "8020"]
         },
         {
+            "name": "Monte Carlo RAVE player on port 8010",
+            "type": "python",
+            "request": "launch",
+            "program": "mc_rave_agent.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--bind", "localhost", "--port", "8010"]
+        },
+        {
             "name": "Basic player on port 8000",
             "type": "python",
             "request": "launch",
@@ -138,6 +147,15 @@
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": ["http://localhost:8000", "http://localhost:8010", "--time", "900"]
+        },
+        {
+            "name": "game port 8020 et port 8010",
+            "type": "python",
+            "request": "launch",
+            "program": "game.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["http://localhost:8020", "http://localhost:8010", "--time", "900"]
         },
         {
             "name": "game port 8020 et human",

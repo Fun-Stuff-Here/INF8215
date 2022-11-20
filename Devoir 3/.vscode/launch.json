@@ -12,6 +12,24 @@
             "console": "integratedTerminal",
             "args": ["-q", "q1"],
             "justMyCode": true
-        }
+        },
+        {
+            "name": "Q2",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+            "args": ["-q", "q2"],
+            "justMyCode": true
+        },
+        {
+            "name": "Q3",
+            "type": "python",
+            "request": "launch",
+            "program": "autograder.py",
+            "console": "integratedTerminal",
+            "args": ["-q", "q3"],
+            "justMyCode": true
+        },
     ]
 }

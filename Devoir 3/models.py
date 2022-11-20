@@ -36,7 +36,7 @@ class PerceptronModel(object):
         Returns: 1 or -1
         """
         "*** TODO: COMPLETE HERE FOR QUESTION 1 ***"
-        return 1 if nn.as_scalar(self.run(x)) > 0 else -1
+        return 1 if nn.as_scalar(self.run(x)) >= 0 else -1
 
     def train(self, dataset):
         """
@@ -62,6 +62,20 @@ class RegressionModel(object):
     def __init__(self):
         # Initialize your model parameters here
         "*** TODO: COMPLETE HERE FOR QUESTION 2 ***"
+        self.learning_rate = 0.1
+        self.n_hidden_layer = 2
+        self.batch_size = 10
+        self.n_input_node = 1
+        self.n_hidden_node = 300
+        self.n_output_node = 1
+        self.max_loss = 0.5
+        self.n_node = [self.n_input_node]
+        for _ in range(self.n_hidden_layer):
+            self.n_node.append(self.n_hidden_node)
+        self.n_node.append(self.n_output_node)
+
+        self.weight = [nn.Parameter(self.n_node[i], self.n_node[i+1]) for i in range(self.n_hidden_layer+1)]
+        self.biais = [nn.Parameter(1, self.n_node[i+1]) for i in range(self.n_hidden_layer+1)]
 
     def run(self, x):
         """
@@ -73,6 +87,11 @@ class RegressionModel(object):
             A node with shape (batch_size x 1) containing predicted y-values
         """
         "*** TODO: COMPLETE HERE FOR QUESTION 2 ***"
+        for i in range(self.n_hidden_layer+1):
+            x = nn.AddBias(nn.Linear(x, self.weight[i]), self.biais[i])
+            if i < self.n_hidden_layer:
+                x = nn.ReLU(x)
+        return x
 
     def get_loss(self, x, y):
         """
@@ -85,13 +104,23 @@ class RegressionModel(object):
         Returns: a loss node
         """
         "*** TODO: COMPLETE HERE FOR QUESTION 2 ***"
+        return nn.SquareLoss(self.run(x), y)
 
     def train(self, dataset):
         """
         Trains the model.
         """
         "*** TODO: COMPLETE HERE FOR QUESTION 2 ***"
-
+        while True:
+            loss = 0
+            for x, y in dataset.iterate_once(self.batch_size):
+                loss += nn.as_scalar(self.get_loss(x, y))
+                for i in range(self.n_hidden_layer+1):
+                    grad_wrt_weight, grad_wrt_biais = nn.gradients(self.get_loss(x, y), [self.weight[i], self.biais[i]])
+                    self.weight[i].update(grad_wrt_weight, -self.learning_rate)
+                    self.biais[i].update(grad_wrt_biais, -self.learning_rate)
+            if loss < self.max_loss:
+                break
 
 class DigitClassificationModel(object):
     """

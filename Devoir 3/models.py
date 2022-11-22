@@ -1,4 +1,6 @@
 import nn
+import numpy as np
+import time
 
 class PerceptronModel(object):
     def __init__(self, dimensions):
@@ -140,6 +142,19 @@ class DigitClassificationModel(object):
     def __init__(self):
         # Initialize your model parameters here
         "*** TODO: COMPLETE HERE FOR QUESTION 3 ***"
+        self.learning_rate = 0.02
+        self.batch_size = 30
+        self.n_hidden_layer_list = [70, 30]
+        self.n_hidden_layer = len(self.n_hidden_layer_list)
+        self.n_input_node = 784
+        self.n_output_node = 10
+        self.accuracy = 0.975
+        self.n_node = [self.n_input_node]
+        self.n_node += self.n_hidden_layer_list
+        self.n_node.append(self.n_output_node)
+
+        self.weight = [nn.Parameter(self.n_node[i], self.n_node[i+1]) for i in range(self.n_hidden_layer+1)]
+        self.biais = [nn.Parameter(1, self.n_node[i+1]) for i in range(self.n_hidden_layer+1)]
 
     def run(self, x):
         """
@@ -157,6 +172,12 @@ class DigitClassificationModel(object):
         """
         "*** TODO: COMPLETE HERE FOR QUESTION 3 ***"
 
+        for i in range(self.n_hidden_layer+1):
+            x = nn.AddBias(nn.Linear(x, self.weight[i]), self.biais[i])
+            if i < self.n_hidden_layer:
+                x = nn.ReLU(x)
+        return x
+
     def get_loss(self, x, y):
         """
         Computes the loss for a batch of examples.
@@ -171,9 +192,21 @@ class DigitClassificationModel(object):
         Returns: a loss node
         """
         "*** TODO: COMPLETE HERE FOR QUESTION 3 ***"
+        return nn.SoftmaxLoss(self.run(x), y)
 
     def train(self, dataset):
         """
         Trains the model.
         """
         "*** TODO: COMPLETE HERE FOR QUESTION 3 ***"
+        begin = time.time()
+        while True:
+            for x, y in dataset.iterate_once(self.batch_size):
+                for i in range(self.n_hidden_layer+1):
+                    grad_wrt_weight, grad_wrt_biais = nn.gradients(self.get_loss(x, y), [self.weight[i], self.biais[i]])
+                    self.weight[i].update(grad_wrt_weight, -self.learning_rate)
+                    self.biais[i].update(grad_wrt_biais, -self.learning_rate)
+            print(f" Accuracy = {dataset.get_validation_accuracy():.4f}\n")
+            if self.accuracy < dataset.get_validation_accuracy():
+                break
+        print(f"Training took: {time.time() - begin} seconds\n")

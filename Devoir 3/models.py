@@ -142,9 +142,9 @@ class DigitClassificationModel(object):
     def __init__(self):
         # Initialize your model parameters here
         "*** TODO: COMPLETE HERE FOR QUESTION 3 ***"
-        self.learning_rate = 0.02
-        self.batch_size = 30
-        self.n_hidden_layer_list = [70, 30]
+        self.learning_rate = 0.1
+        self.batch_size = 100
+        self.n_hidden_layer_list = [148]
         self.n_hidden_layer = len(self.n_hidden_layer_list)
         self.n_input_node = 784
         self.n_output_node = 10
